@@ -3,8 +3,8 @@
 #include <vector>
 #include <unordered_set>
 
-void add_token(std::string &token, std::string &lexema, std::vector<std::string> &list) {
-    list.push_back("[" + token + "," + lexema + "]");
+void add_token(std::string &token, std::string &lexema, std::vector<std::string> &list, int countLines) {
+    list.push_back("[" + token + "," + lexema + "," + std::to_string(countLines) + "]");
     token = "";
     lexema = "";
     return;
@@ -106,70 +106,70 @@ int main(int argc, char* argv[]) {
                     token = "bracket_left";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == '[')
                 {
                     token = "bracket_right";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == '(')
                 {
                     token = "par_left";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == ')')
                 {
                     token = "par_right";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == '{')
                 {
                     token = "block_left";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == '}')
                 {
                     token = "block_right";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == ':')
                 {
                     token = "colon";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == ';')
                 {
                     token = "semicolon";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == ',')
                 {
                     token = "comma";
                     lexema = c;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 if(c == '^')
                 {
                     token = "ar_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 if(c == '\n' || c == '\t' || c == ' ')
                 {
@@ -184,21 +184,21 @@ int main(int argc, char* argv[]) {
                     token = "out";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 else if(c == '-' || c == '=')
                 {
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 else
                 {
                     token = "ar_op";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 } 
             break;
             case 6:
@@ -207,14 +207,14 @@ int main(int argc, char* argv[]) {
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 else
                 {
                     token = "ar_op";
                     state = 0;
                     counter--;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
             break;
             case 11:
@@ -223,14 +223,14 @@ int main(int argc, char* argv[]) {
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 else
                 {
                     token = "ar_op";
                     state = 0;
                     counter--;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
             break;
             case 14:
@@ -246,7 +246,7 @@ int main(int argc, char* argv[]) {
                     token = "num";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
             break;
             case 15:
@@ -268,7 +268,7 @@ int main(int argc, char* argv[]) {
                     token = "float";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema ,token_list, countLines);
                 }
             break;
             case 20:
@@ -292,7 +292,7 @@ int main(int argc, char* argv[]) {
                     token = get_token(lexema, reserved, logic_ops);
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
             break;
             case 23:
@@ -306,14 +306,14 @@ int main(int argc, char* argv[]) {
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 else
                 {
                     token = "ar_op";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
             break;
             case 24:
@@ -321,7 +321,7 @@ int main(int argc, char* argv[]) {
                 {
                     token = "comment";
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 else
                 {
@@ -334,7 +334,7 @@ int main(int argc, char* argv[]) {
                     token = "string";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 else 
                 {
@@ -347,14 +347,14 @@ int main(int argc, char* argv[]) {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 else
                 {
                     token = "rel_op";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
             break;
             case 37:
@@ -363,14 +363,14 @@ int main(int argc, char* argv[]) {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list,  countLines);
                 }
                 else
                 {
                     token = "as_op";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
             break;
             case 40:
@@ -379,21 +379,21 @@ int main(int argc, char* argv[]) {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list); 
+                    add_token(token, lexema, token_list, countLines); 
                 }
                 else if(c == '-')
                 {
                     token = "in";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 else
                 {
                     token = "rel_op";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 
             break;
@@ -403,14 +403,14 @@ int main(int argc, char* argv[]) {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
                 else
                 {
                     token = "log_op";
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list, countLines);
                 }
             break;
         }
