@@ -14,6 +14,6 @@ for i32  i = 0; i < 4; i++{
     }
 }
 
--> "O menor número eh: ";
+-> "O menor numero eh: ";
 -> menor;
 -> "\n";

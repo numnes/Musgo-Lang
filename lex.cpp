@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <unordered_set>
 
 void add_token(std::string &token, std::string &lexema, std::vector<std::string> &list) {
     list.push_back("[" + token + "," + lexema + "]");
@@ -9,12 +10,16 @@ void add_token(std::string &token, std::string &lexema, std::vector<std::string>
     return;
 }
 
-
-
+std::string get_token(std::string lexema, std::unordered_set<std::string> reserved)
+{
+    return reserved.count(lexema) ? lexema : "id";
+}
 
 int main(int argc, char* argv[]) {
 
     std::vector<std::string> token_list;
+    std::unordered_set<std::string> reserved = {"i32","i64","f32","f64","bool","char","const","if",
+                   "else","for","foreach","xor","not","or","and"};
 
     std::ifstream arq("main.mg");
 
@@ -28,7 +33,6 @@ int main(int argc, char* argv[]) {
     long long int length = arq.tellg();
     arq.seekg(0, arq.beg);
     
-    
     char musgonizer[length]; //Armazena arquivo a ser aberto  	
     
     //Lê o arquivo todo como um bloco para o buffer musgonizer
@@ -38,7 +42,6 @@ int main(int argc, char* argv[]) {
     int counter = 0;
     std::string token;
     std::string lexema;
-    
 
     while(counter < length){
         char c = musgonizer[counter];
@@ -51,7 +54,7 @@ int main(int argc, char* argv[]) {
                     state = 14;
                     lexema += c;
                 }
-                else if(c >= 'a' &&  c <= 'Z'){
+                else if((c >= 'A' &&  c <= 'Z') ||  (c >= 'a' && c <= 'z')){
                     state = 20;
                     lexema += c;
                 }
@@ -148,6 +151,13 @@ int main(int argc, char* argv[]) {
                     state = 0;
                     add_token(token,lexema,token_list); 
                 }
+                if(c == ',')
+                {
+                    token = "comma";
+                    lexema = c;
+                    state = 0;
+                    add_token(token,lexema,token_list);
+                }
                 if(c == '^')
                 {
                     token = "ar_op";
@@ -178,7 +188,7 @@ int main(int argc, char* argv[]) {
                 else
                 {
                     token = "ar_op";
-                    lexema += c;
+                    counter--;
                     state = 0;
                     add_token(token,lexema,token_list); 
                 } 
@@ -194,8 +204,8 @@ int main(int argc, char* argv[]) {
                 else
                 {
                     token = "ar_op";
-                    lexema += c;
                     state = 0;
+                    counter--;
                     add_token(token,lexema,token_list); 
                 }
             break;
@@ -210,21 +220,23 @@ int main(int argc, char* argv[]) {
                 else
                 {
                     token = "ar_op";
-                    lexema += c;
                     state = 0;
+                    counter--;
                     add_token(token,lexema,token_list); 
                 }
             break;
             case 14:
-                if(c >='0' && c <= '9' )
+                if(c >= '0' && c <= '9' )
                     lexema += c;
-                if(c == '.')
+                else if(c == '.')
                 {
                     lexema += c;
                     state = 15;
                 }
-                else{
+                else
+                {
                     token = "num";
+                    counter--;
                     state = 0;
                     add_token(token,lexema,token_list);
                 }
@@ -245,33 +257,27 @@ int main(int argc, char* argv[]) {
                     lexema += c;
                 else
                 {
-                    token = "id";//get_token()
-                    state = 0;
-                    add_token(token,lexema,token_list);
-                }
-            break;
-            case 20:
-                if((c >= '0' &&  c <= '9') || (c >= 'a' &&  c <= 'Z'))
-                {
-                    state = 21;
-                    lexema += c;
-                }
-                else
-                {
-                    token = "float";//get_token()
+                    token = "float";
                     counter--;
                     state = 0;
                     add_token(token,lexema,token_list);
                 }
             break;
+            case 20:
+                if((c >= '0' &&  c <= '9') || (c >= 'A' &&  c <= 'Z') ||  (c >= 'a' && c <= 'z'))
+                {
+                    state = 21;
+                    lexema += c;
+                }
+            break;
             case 21:
-                if((c >= '0' &&  c <= '9') || (c >= 'a' &&  c <= 'Z') || (c == '_'))
+                if((c >= '0' &&  c <= '9') || (c >= 'A' &&  c <= 'Z') ||  (c >= 'a' && c <= 'z') || (c == '_'))
                 {
                     lexema += c;
                 }
                 else
                 {
-                    token = "id";//get_token()
+                    token = get_token(lexema,reserved);
                     counter--;
                     state = 0;
                     add_token(token,lexema,token_list);
@@ -281,11 +287,12 @@ int main(int argc, char* argv[]) {
                 if(c == '/')
                 {
                     state = 24;
-                    lexema +=c;
+                    lexema += c;
                 }
                 else if(c == '=')
                 {
                     token = "as_op";
+                    lexema += c;
                     state = 0;
                     add_token(token,lexema,token_list);
                 }
@@ -358,7 +365,7 @@ int main(int argc, char* argv[]) {
             case 40:
                 if(c == '=')
                 {
-                   token = "rel_op";
+                    token = "rel_op";
                     lexema += c;
                     state = 0;
                     add_token(token,lexema,token_list); 
