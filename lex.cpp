@@ -10,16 +10,17 @@ void add_token(std::string &token, std::string &lexema, std::vector<std::string>
     return;
 }
 
-std::string get_token(std::string lexema, std::unordered_set<std::string> reserved)
+std::string get_token(std::string lexema, std::unordered_set<std::string> reserved, std::unordered_set<std::string> logic_ops)
 {
-    return reserved.count(lexema) ? lexema : "id";
+    return reserved.count(lexema) ? (lexema) : (logic_ops.count(lexema) ?  "log_op" : "id");
 }
 
 int main(int argc, char* argv[]) {
 
     std::vector<std::string> token_list;
-    std::unordered_set<std::string> reserved = {"i32","i64","f32","f64","bool","char","const","if",
-                   "else","for","foreach","xor","not","or","and"};
+    std::unordered_set<std::string> reserved = {"i32", "i64", "f32", "f64", "bool", "char", "const", "if",
+                   "else", "for", "foreach"};
+    std::unordered_set<std::string> logic_ops = {"xor", "not", "or", "and"};
 
     std::ifstream arq("main.mg");
 
@@ -40,6 +41,7 @@ int main(int argc, char* argv[]) {
 
     int state = 0;
     int counter = 0;
+    int countLines = 0;
     std::string token;
     std::string lexema;
 
@@ -54,7 +56,7 @@ int main(int argc, char* argv[]) {
                     state = 14;
                     lexema += c;
                 }
-                else if((c >= 'A' &&  c <= 'Z') ||  (c >= 'a' && c <= 'z')){
+                else if(c == '_'){
                     state = 20;
                     lexema += c;
                 }
@@ -92,6 +94,10 @@ int main(int argc, char* argv[]) {
                 }
                 else if(c == '!'){
                     state = 44;
+                    lexema += c;
+                }
+                else if((c >= 'A' &&  c <= 'Z') ||  (c >= 'a' && c <= 'z')){
+                    state = 21;
                     lexema += c;
                 }
                 // finais
@@ -167,6 +173,8 @@ int main(int argc, char* argv[]) {
                 }
                 if(c == '\n' || c == '\t' || c == ' ')
                 {
+                    if(c == '\n')
+                        countLines ++; 
                     continue;
                 }
             break;
@@ -248,7 +256,7 @@ int main(int argc, char* argv[]) {
                     state = 16;
                 }
                 else{
-                    std:: cout << "erro\n";
+                    std:: cout << "erro na linha" << countLines << "\n";
                     state = 0;
                 }
             break;
@@ -269,6 +277,10 @@ int main(int argc, char* argv[]) {
                     state = 21;
                     lexema += c;
                 }
+                else{
+                    std:: cout << "erro na linha" << countLines << "\n";
+                    state = 0;
+                }
             break;
             case 21:
                 if((c >= '0' &&  c <= '9') || (c >= 'A' &&  c <= 'Z') ||  (c >= 'a' && c <= 'z') || (c == '_'))
@@ -277,10 +289,10 @@ int main(int argc, char* argv[]) {
                 }
                 else
                 {
-                    token = get_token(lexema,reserved);
+                    token = get_token(lexema, reserved, logic_ops);
                     counter--;
                     state = 0;
-                    add_token(token,lexema,token_list);
+                    add_token(token, lexema, token_list);
                 }
             break;
             case 23:
@@ -308,7 +320,6 @@ int main(int argc, char* argv[]) {
                 if(c == '\n')
                 {
                     token = "comment";
-                    lexema += c;
                     state = 0;
                     add_token(token,lexema,token_list);
                 }
