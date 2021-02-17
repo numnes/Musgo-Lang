@@ -2,12 +2,14 @@
 #include <fstream>
 #include <vector>
 #include <unordered_set>
+#include <string>
 
-void add_token(std::string &token, std::string &lexema, std::vector<std::string> &list, int countLines) {
-    list.push_back("[" + token + "," + lexema + "," + std::to_string(countLines) + "]");
+void add_token(std::string &token, std::string &lexema, std::vector<std::string> &list, int countLines) 
+{    
+    std::string aux = "[" + token + "," + lexema + "," + std::to_string(countLines) + "]";
+    list.push_back(aux);
     token = "";
     lexema = "";
-    return;
 }
 
 std::string get_token(std::string lexema, std::unordered_set<std::string> reserved, std::unordered_set<std::string> logic_ops)
@@ -17,33 +19,40 @@ std::string get_token(std::string lexema, std::unordered_set<std::string> reserv
 
 int main(int argc, char* argv[]) {
 
-    std::vector<std::string> token_list;
-    std::unordered_set<std::string> reserved = {"i32", "i64", "f32", "f64", "bool", "char", "const", "if",
-                   "else", "for", "foreach"};
-    std::unordered_set<std::string> logic_ops = {"xor", "not", "or", "and"};
-
-    std::ifstream arq("main.mg");
-
-    if(!arq.is_open())
+    if (argc <= 1)
     {
-        std::cout << "ERRO" << std::endl;
+        std::cout << "Error, no input file\n";
         return 0;
     }
 
+    std::ifstream arq(argv[1]);
+
+    if(!arq.is_open())
+    {
+        std::cout << "Error opening file" << std::endl;
+        return 0;
+    }
+
+    //Gets the file's size in bytes
     arq.seekg (0, arq.end);
     long long int length = arq.tellg();
     arq.seekg(0, arq.beg);
     
-    char musgonizer[length]; //Armazena arquivo a ser aberto  	
+    char musgonizer[length]; //Holds the data 	
     
-    //Lê o arquivo todo como um bloco para o buffer musgonizer
-    arq.read(musgonizer,length);
+    arq.read(musgonizer,length);  //Read the file into musgonizer buffer
 
     int state = 0;
     int counter = 0;
     int countLines = 0;
     std::string token;
     std::string lexema;
+
+    std::vector<std::string> token_list;
+    std::unordered_set<std::string> reserved = {"i32", "i64", "f32", "f64", "bool", "char", 
+                                                "const", "if", "else", "for", "foreach"};
+    std::unordered_set<std::string> logic_ops = {"xor", "not", "or", "and"};
+
 
     while(counter < length){
         char c = musgonizer[counter];
@@ -320,6 +329,7 @@ int main(int argc, char* argv[]) {
                 if(c == '\n')
                 {
                     token = "comment";
+                    lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                 }
