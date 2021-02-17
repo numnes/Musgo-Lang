@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 
     if (argc <= 1)
     {
-        std::cout << "Error, no input file\n";
+        std::cerr << "Error, no input file\n";
         return 0;
     }
 
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     if(!arq.is_open())
     {
-        std::cout << "Error opening file" << std::endl;
+        std::cerr << "Error opening file" << std::endl;
         return 0;
     }
 
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 
     int state = 0;
     int counter = 0;
-    int countLines = 0;
+    int countLines = 1;
     std::string token;
     std::string lexema;
 
@@ -110,81 +110,84 @@ int main(int argc, char* argv[]) {
                     lexema += c;
                 }
                 // finais
-                if(c == ']')
+                else if(c == ']')
                 {
                     token = "bracket_left";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == '[')
+                else if(c == '[')
                 {
                     token = "bracket_right";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == '(')
+                else if(c == '(')
                 {
                     token = "par_left";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == ')')
+                else if(c == ')')
                 {
                     token = "par_right";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == '{')
+                else if(c == '{')
                 {
                     token = "block_left";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == '}')
+                else if(c == '}')
                 {
                     token = "block_right";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == ':')
+                else if(c == ':')
                 {
                     token = "colon";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == ';')
+                else if(c == ';')
                 {
                     token = "semicolon";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == ',')
+                else if(c == ',')
                 {
                     token = "comma";
                     lexema = c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                 }
-                if(c == '^')
+                else if(c == '^')
                 {
                     token = "ar_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                if(c == '\n' || c == '\t' || c == ' ')
+                else if(c == '\n' || c == '\t' || c == ' ' || (int) c == 13)
                 {
                     if(c == '\n')
                         countLines ++; 
                     continue;
+                }
+                else {
+                    std::cerr << "Error: Invalid character " << c << " at line " << countLines << std::endl;
                 }
             break;
             case 1:
@@ -265,7 +268,7 @@ int main(int argc, char* argv[]) {
                     state = 16;
                 }
                 else{
-                    std:: cout << "erro na linha" << countLines << "\n";
+                    std:: cerr << "Error: Expected an numeric value after \".\", got \""<< c << "\" at line " << countLines << "\n";
                     state = 0;
                 }
             break;
@@ -287,7 +290,7 @@ int main(int argc, char* argv[]) {
                     lexema += c;
                 }
                 else{
-                    std:: cout << "erro na linha" << countLines << "\n";
+                    std:: cerr << "Error: Expected an alphanumeric character after \"_\", got \""<< c << "\" at line " << countLines << "\n";
                     state = 0;
                 }
             break;
@@ -332,6 +335,7 @@ int main(int argc, char* argv[]) {
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
+                    countLines++;
                 }
                 else
                 {
@@ -425,7 +429,8 @@ int main(int argc, char* argv[]) {
             break;
         }
     }
-    for(auto x : token_list)
-        std::cout << x << "\n";
+    if (argc > 2 and argv[2][1] == 'p')
+        for(auto x : token_list)
+            std::cout << x << "\n";
     
 }
