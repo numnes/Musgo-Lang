@@ -110,77 +110,77 @@ int main(int argc, char* argv[]) {
                     lexema += c;
                 }
                 // finais
-                else if(c == ']')
-                {
-                    token = "bracket_left";
-                    lexema += c;
-                    state = 0;
-                    add_token(token, lexema, token_list, countLines); 
-                }
-                else if(c == '[')
+                else if(c == ']') //50
                 {
                     token = "bracket_right";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == '(')
+                else if(c == '[') //49
+                {
+                    token = "bracket_left";
+                    lexema += c;
+                    state = 0;
+                    add_token(token, lexema, token_list, countLines); 
+                }
+                else if(c == '(') //32
                 {
                     token = "par_left";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == ')')
+                else if(c == ')') //33
                 {
                     token = "par_right";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == '{')
+                else if(c == '{') //28
                 {
                     token = "block_left";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == '}')
+                else if(c == '}') //29
                 {
                     token = "block_right";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == ':')
+                else if(c == ':') //19
                 {
                     token = "colon";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == ';')
+                else if(c == ';') //48
                 {
                     token = "semicolon";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == ',')
+                else if(c == ',') //51
                 {
                     token = "comma";
                     lexema = c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                 }
-                else if(c == '^')
+                else if(c == '^') //10
                 {
                     token = "ar_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == '\n' || c == '\t' || c == ' ' || (int) c == 13)
+                else if(c == '\n' || c == '\t' || c == ' ' || (int) c == 13) //47
                 {
                     if(c == '\n')
                         countLines ++; 
@@ -191,21 +191,21 @@ int main(int argc, char* argv[]) {
                 }
             break;
             case 1:
-                if(c == '>')
+                if(c == '>') //2
                 {
                     token = "out";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == '-' || c == '=')
+                else if(c == '-' || c == '=') //3+4
                 {
                     token = "as_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else
+                else //5
                 {
                     token = "ar_op";
                     counter--;
@@ -214,14 +214,14 @@ int main(int argc, char* argv[]) {
                 } 
             break;
             case 6:
-                if(c == '+' || c == '=')
+                if(c == '+' || c == '=') //7+8
                 {
                     token = "as_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else
+                else //9
                 {
                     token = "ar_op";
                     state = 0;
@@ -230,14 +230,14 @@ int main(int argc, char* argv[]) {
                 }
             break;
             case 11:
-                if(c == '=')
+                if(c == '=') //12
                 {
                     token = "as_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else
+                else //13
                 {
                     token = "ar_op";
                     state = 0;
@@ -253,7 +253,7 @@ int main(int argc, char* argv[]) {
                     lexema += c;
                     state = 15;
                 }
-                else
+                else //18
                 {
                     token = "num";
                     counter--;
@@ -275,7 +275,7 @@ int main(int argc, char* argv[]) {
             case 16:
                 if(c >='0' && c <= '9' )
                     lexema += c;
-                else
+                else //17
                 {
                     token = "float";
                     counter--;
@@ -299,7 +299,7 @@ int main(int argc, char* argv[]) {
                 {
                     lexema += c;
                 }
-                else
+                else //22
                 {
                     token = get_token(lexema, reserved, logic_ops);
                     counter--;
@@ -313,14 +313,14 @@ int main(int argc, char* argv[]) {
                     state = 24;
                     lexema += c;
                 }
-                else if(c == '=')
+                else if(c == '=') //26
                 {
                     token = "as_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                 }
-                else
+                else //27
                 {
                     token = "ar_op";
                     counter--;
@@ -329,7 +329,7 @@ int main(int argc, char* argv[]) {
                 }
             break;
             case 24:
-                if(c == '\n')
+                if(c == '\n') //25
                 {
                     token = "comment";
                     lexema += c;
@@ -343,7 +343,7 @@ int main(int argc, char* argv[]) {
                 }
             break;
             case 30:
-                if( c == '"')
+                if( c == '"') //31
                 {
                     token = "string";
                     lexema += c;
@@ -356,14 +356,14 @@ int main(int argc, char* argv[]) {
                 }
             break;
             case 34:
-                 if(c == '=')
+                 if(c == '=') //35
                 {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                 }
-                else
+                else //36
                 {
                     token = "rel_op";
                     counter--;
@@ -372,14 +372,14 @@ int main(int argc, char* argv[]) {
                 }
             break;
             case 37:
-             if(c == '=')
+             if(c == '=') //38
                 {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list,  countLines);
                 }
-                else
+                else //39
                 {
                     token = "as_op";
                     counter--;
@@ -388,21 +388,21 @@ int main(int argc, char* argv[]) {
                 }
             break;
             case 40:
-                if(c == '=')
+                if(c == '=') //41
                 {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines); 
                 }
-                else if(c == '-')
+                else if(c == '-') //42
                 {
                     token = "in";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                 }
-                else
+                else //43
                 {
                     token = "rel_op";
                     counter--;
@@ -412,14 +412,14 @@ int main(int argc, char* argv[]) {
                 
             break;
             case 44:
-                if(c == '=')
+                if(c == '=') //45
                 {
                     token = "rel_op";
                     lexema += c;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                 }
-                else
+                else //46
                 {
                     token = "log_op";
                     counter--;
@@ -429,6 +429,7 @@ int main(int argc, char* argv[]) {
             break;
         }
     }
+    //Print mode
     if (argc > 2 and argv[2][1] == 'p')
         for(auto x : token_list)
             std::cout << x << "\n";
