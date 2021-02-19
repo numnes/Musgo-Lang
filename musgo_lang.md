@@ -153,3 +153,50 @@ for  i = 0; i < 4; i++{
 
 
 ## BNF
+
+```
+    <program>           ->  <statementList>
+    <statementList>     ->  <statement> | <statementList> <statement>
+    <statement>         ->  <assignment> | <loop> | 
+    <aplicables>        ->  <logExp> | <matExp>
+
+    <id>                ->  <letter> <identifier> | "_" <identifier> | <letter>
+    <identifier>        ->  <number> <identifier> | <leter> <identifier> |  "_" <identifier> | <letter>
+    <word>              ->  <number> <word> | <leter> <word> | <word> | <letter> | <expChar>
+    <expChar>           ->  "#" | "@" | "/n" | ..... 
+    <scope>             ->  "{" <statementList> "}"
+    // Types
+    <value>             ->  <letter> | <number> | <float> | <string> | <id>
+    <types>             ->  "i32" | "i64" | "f32" | "f64" | "bool" | "char" |
+    <letter>            ->  "a" | "b" | "c" | .... | "z" | "A" | "B" | "C"| ... | "Z" 
+    <number>            ->  0 | 1 | 2 | .... | 9 | <number>
+    <string>            ->  """ <word> """
+    <float>             ->  <number> | <number> . <number> 
+    // Assign
+    <assignment>        ->  <type> <id> "=" <expression> ";" | <id> "=" <expression> ";" | <type> <id> "[" <num> "]" <assignment>
+    // Expressions
+    <expression>        ->  <logExp> | <logExp> | <relExp> | <id> | <value>
+    <matExp>            ->  <matExp> <matOp> <matExp> | <expression>
+    <relExp>            ->  <relExp>  <relOp> <Expression>
+    <logExp>            ->  <logExp> <logOp> <logExp> | <unLogExp> | <id> | "("<logExp>")"
+    <unLogExp>          ->  <unLogOp> <logExp> 
+    <exp>               ->  <exp> <expOperator> <termExp> | <termExp> | "("<exp>")"
+    <termExp>           ->  <termExp> <termOp> <matExp> 
+    // Operators
+    <matOp>             ->  "^"
+    <expOp>             ->  "+" | "-"
+    <termOp>            ->  "*" | "/"
+    <logOp>             ->  "and" | "or" | "xor"
+    <unLogOp>           ->  "not"
+    // Controll
+    <if>                ->  "if" <logExp> <scope> | "if" <relExp> <scope> | <if> <else>
+    <else>              ->  "else" <scope> | "else" <if>
+    //Loop
+    <loop>              ->  <for> | <forEach>
+    <for>               ->  "for" <assignment> ";" <logExp> ; 
+    <forEach>           ->  "foeach" <assignment> ":" <id> <scope>
+    // IO
+    <IO>                ->  <print> | <put>
+    <print>             ->  "->" <value> ";"
+    <put>               ->  "<-" <id> ";"
+```
