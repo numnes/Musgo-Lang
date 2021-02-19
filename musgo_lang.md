@@ -150,7 +150,34 @@ for  i = 0; i < 4; i++{
 ```
 
 ## Expressões Regulares
+```
+num           -> [0-9]+
+alfanum       -> ([a-Z] | num)+
+float         -> [num]+[.] [num]+
+space         -> (tab | whitespace | newline)+
+rel_op        -> [>] | [<] | [>=] | [<=] | [==] | [!=]
+ar_op         -> [+] | [-] | [*] | [/] | [^]
+as_op         -> [=] | [+=] | [-=] | [*=] | [/=] | [++] | [--]
+log_op        -> [[!] | [and] | [or] | [not] | [xor] 
+id            -> ([a-Z] | [_][alfanum]+) ([alfanum] | _ )*
+string        -> ["][~"]*["]
+comment       -> [//][~newline]*[newline]
+booleans      -> ([true] | [false])
+in            -> [<-]
+out           -> [->]
+block_left    -> [{]
+block_right   -> [}]
+par_left      -> [(]
+par_right     -> [)]
+colon         -> [:]
+semicolon     -> [;]
+comma         -> [,]
+bracket_left  -> [[]
+bracket_right -> []]
+type          -> [i32] | [i64] | [f32] | [f64] | [bool]
+reserved      -> [for] | [foreach] | [if] | [else] | [char] | [const]
 
+```
 
 ## BNF
 
