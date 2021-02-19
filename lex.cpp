@@ -4,44 +4,36 @@
 #include <unordered_set>
 #include <string>
 
-void add_token(std::string &token, std::string &lexema, std::vector<std::string> &list, int countLines) 
+inline
+void add_token(const std::string &token, const std::string &lexema, std::vector<std::string> &list, int countLines) 
 {    
     std::string aux = "[" + token + "," + lexema + "," + std::to_string(countLines) + "]";
     list.push_back(aux);
-    token = "";
-    lexema = "";
 }
 
-std::string get_token(std::string lexema, std::unordered_set<std::string> reserved, std::unordered_set<std::string> logic_ops)
+inline
+std::string get_token(const std::string &lexema)
 {
-    return reserved.count(lexema) ? (lexema) : (logic_ops.count(lexema) ?  "log_op" : "id");
+    std::unordered_set<std::string> reserved = {"const", "if", "else", "for", "foreach"};
+    std::unordered_set<std::string> logic_ops = {"xor", "not", "or", "and"};
+    std::unordered_set<std::string> types = {"i32", "i64", "f32", "f64", "bool", "char"};
+
+    std::string token;
+
+    if(reserved.count(lexema))
+        token = lexema;
+    else if(logic_ops.count(lexema))
+        token = "log_op";
+    else if(types.count(lexema))
+        token = "type";
+    else
+        token = "id";
+    
+    return token;
 }
 
-int main(int argc, char* argv[]) {
-
-    if (argc <= 1)
-    {
-        std::cerr << "Error, no input file\n";
-        return 0;
-    }
-
-    std::ifstream arq(argv[1]);
-
-    if(!arq.is_open())
-    {
-        std::cerr << "Error opening file" << std::endl;
-        return 0;
-    }
-
-    //Gets the file's size in bytes
-    arq.seekg (0, arq.end);
-    long long int length = arq.tellg();
-    arq.seekg(0, arq.beg);
-    
-    char musgonizer[length]; //Holds the data 	
-    
-    arq.read(musgonizer,length);  //Read the file into musgonizer buffer
-
+inline
+std::vector<std::string> lex_processing(const char musgonizer[], int length ){ 
     int state = 0;
     int counter = 0;
     int countLines = 1;
@@ -49,17 +41,14 @@ int main(int argc, char* argv[]) {
     std::string lexema;
 
     std::vector<std::string> token_list;
-    std::unordered_set<std::string> reserved = {"i32", "i64", "f32", "f64", "bool", "char", 
-                                                "const", "if", "else", "for", "foreach"};
-    std::unordered_set<std::string> logic_ops = {"xor", "not", "or", "and"};
-
 
     while(counter < length){
         char c = musgonizer[counter];
         counter++;
-
         switch(state){
             case 0:
+                token = "";
+                lexema = "";
                 // não finais
                 if(c >= '0' &&  c <= '9'){
                     state = 14;
@@ -174,6 +163,13 @@ int main(int argc, char* argv[]) {
                     add_token(token, lexema, token_list, countLines);
                 }
                 else if(c == '^') //10
+                {
+                    token = "ar_op";
+                    lexema += c;
+                    state = 0;
+                    add_token(token, lexema, token_list, countLines); 
+                }
+                else if(c == '%') //10
                 {
                     token = "ar_op";
                     lexema += c;
@@ -301,7 +297,7 @@ int main(int argc, char* argv[]) {
                 }
                 else //22
                 {
-                    token = get_token(lexema, reserved, logic_ops);
+                    token = get_token(lexema);
                     counter--;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
@@ -332,7 +328,8 @@ int main(int argc, char* argv[]) {
                 if(c == '\n') //25
                 {
                     token = "comment";
-                    lexema += c;
+                    lexema += "";
+                    lexema[lexema.size()-1] = 0;
                     state = 0;
                     add_token(token, lexema, token_list, countLines);
                     countLines++;
@@ -429,9 +426,5 @@ int main(int argc, char* argv[]) {
             break;
         }
     }
-    //Print mode
-    if (argc > 2 and argv[2][1] == 'p')
-        for(auto x : token_list)
-            std::cout << x << "\n";
-    
+    return token_list;
 }
