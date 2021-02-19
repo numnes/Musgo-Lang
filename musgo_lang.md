@@ -55,7 +55,7 @@ São 23 operadores ao total, 6 operadores relacionais, 4 lógicos, 7 de atribui�
 | `^`                    | Potenciação       |
 
 ### Identificadores
-    Os identificadores são formados por conjuntos de caracteres iniciados por letras de A a Z, maiusculas ou minusculas ou pelo simbolo `_`, seguidos por qualquer caracter alfanumérico. Porém não é possível criar identificadores somente com `_`.
+Os identificadores são formados por conjuntos de caracteres iniciados por letras de A a Z, maiusculas ou minusculas ou pelo simbolo `_`, seguidos por qualquer caracter alfanumérico. Porém não é possível criar identificadores somente com `_`.
 
 ### Comandos de entrada e saída
 
