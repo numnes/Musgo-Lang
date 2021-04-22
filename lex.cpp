@@ -4,14 +4,13 @@
 #include <unordered_set>
 #include <string>
 
-inline
 void add_token(const std::string &token, const std::string &lexema, std::vector<std::string> &list, int countLines) 
 {    
     std::string aux = "[" + token + "," + lexema + "," + std::to_string(countLines) + "]";
     list.push_back(aux);
 }
 
-inline
+
 std::string get_token(const std::string &lexema)
 {
     std::unordered_set<std::string> reserved = {"const", "if", "else", "for", "foreach"};
@@ -265,7 +264,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                 }
                 else{
                     std:: cerr << "Error: Expected an numeric value after \".\", got \""<< c << "\" at line " << countLines << "\n";
-                    state = 0;
+                    state = 16;
                 }
             break;
             case 16:
@@ -287,7 +286,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                 }
                 else{
                     std:: cerr << "Error: Expected an alphanumeric character after \"_\", got \""<< c << "\" at line " << countLines << "\n";
-                    state = 0;
+                    state = 21;
                 }
             break;
             case 21:
@@ -327,11 +326,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
             case 24:
                 if(c == '\n') //25
                 {
-                    token = "comment";
-                    lexema += "";
-                    lexema[lexema.size()-1] = 0;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
                     countLines++;
                 }
                 else
