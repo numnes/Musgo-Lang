@@ -189,7 +189,7 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 
 ```
 
-    TODO = cast, pecedencia?, const
+    TODO =  const
 
     <program>           ->  <statementList>
     <statementList>     ->  <statement> <statementList'>
@@ -197,13 +197,14 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     <statement>         ->  <assignment> | <loop> | <if> | <io>
 
     
-    <assignment>        ->  <type> <id> <assignment'> | <assign>
+    <assignment>        -> "const" <type> <id> <assignment'> |<type> <id> <assignment'> | <assign>
     <assignment'>       -> <as_op> <expression> ";" | "[" <num> "]" <assignment''>  | ";"
     <assignment''>      -> <as_op> "{" <list> "}" ";" | ";"
     
     <assign>            ->  <id> <as_op><assign'>
-    <assign'>           ->  <expression> ";" | <λ>
-                            
+    <assign'>           ->  <expression> ";" | ";"
+
+
     <type>              ->  "i32" | "i64" | "f32" | "f64" | "bool" | "char"
 
     <list>              ->  <num><list'> | <booleans><list'> | <float><list'> | <char><list'>
@@ -218,7 +219,7 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 
     <scope>             ->  "{" <statementList> "}"
 
-    <expression>        ->  <logExp> | <relExp> | <id> | <value> | <matExp>
+    <expression>        ->  <cast> <expression> | <logExp> | <relExp> | <id> | <value> | <matExp>
 
     <logExp>            ->  <unLogExp> <logExp'> | <id> <logExp'> | <boolean> <logExp'> | "("<logExp>")" <logExp'>
     <logExp'>           -> <log_op> <logExp> <logExp'> | <λ>
@@ -227,7 +228,7 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     
     <matExp>            ->  <expression> <ar_op> <expression> | "(" <matExp> ")"
     
-
+    <cast>              -> "(" <type> ")"
 
     <io>                ->  <in> | <out>
     <out>               ->  "->" <expression> ";"
