@@ -188,6 +188,9 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 ## BNF
 
 ```
+
+    TODO = cast, pecedencia?, const
+
     <program>           ->  <statementList>
     <statementList>     ->  <statement> <statementList'>
     <statementList'>    ->  <statement> <statementList'> | <λ>
@@ -209,70 +212,55 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     <as_op>             -> "=" | "+=" | "-=" | "*=" | "/=" | "++" | "--"
 
     
-    <loop>              ->  <for> | <forEach>
+    <loop>              ->  <for> <scope> | <forEach> <scope>
     <for>               ->  "for" <assignment> ";" <logExp> ";"  <assign>
-    <forEach>           ->  "foeach" <assignment> ":" <id> <scope>
+    <forEach>           ->  "foeach" <assignment> ":" <id> 
 
     <scope>             ->  "{" <statementList> "}"
 
-    <expression>        ->  <logExp> | <relExp> | <id> | <value>
+    <expression>        ->  <logExp> | <relExp> | <id> | <value> | <matExp>
 
+    <logExp>            ->  <unLogExp> <logExp'> | <id> <logExp'> | <boolean> <logExp'> | "("<logExp>")" <logExp'>
+    <logExp'>           -> <log_op> <logExp> <logExp'> | <λ>
 
-    <logExp>            ->  <logExp> <logOp> <logExp> | <unLogExp> | <id> | "("<logExp>")"
+    <relExp>            ->  <expression> <rel_op> <expression> | "(" <relExp> ")"
+    
+    <matExp>            ->  <expression> <ar_op> <expression> | "(" <matExp> ")"
     
 
 
+    <io>                ->  <in> | <out>
+    <out>               ->  "->" <expression> ";"
+    <in>                ->  "<-" <id> ";"
 
 
+    <logOp>             ->  "and" | "or" | "xor"
+    <unLogOp>           ->  "not"
+     
 
+    <value>             ->  <char> | <number> | <float> | <id>
 
-
-    <aplicables>        ->  <logExp> | <matExp> 
-
-
-
-
-
-
-
-    <id>                ->  <letter> <identifier> | "_" <identifier> | <letter>
-    <identifier>        ->  <number> <identifier> | <leter> <identifier> |  "_" <identifier> | <letter>
-    <word>              ->  <number> <word> | <leter> <word> | <word> | <letter> | <expChar>
-    <expChar>           ->  "#" | "@" | "/n" | ..... 
-
-    // Types
     
-    <value>             ->  <letter> | <number> | <float> | <string> | <id>
+    <if>                ->  "if" <if'><if''>
+    <if'>               ->  <logExp> <scope> | <relExp> <scope>
+    <if''>              ->  <else><if''> | <λ>
+    <else>              ->  "else" <else'> 
+    <else'>             ->  <scope> | <if>
 
 
-    // Assign
-    <assignment>        ->  <type> <id> "=" <expression> ";" | <id> "=" <expression> ";" | <type> <id> "[" <num> "]" <assignment>
+
+
+    /*  Daqui pra baixo tá zoado */
 
     // Expressions
 
     <matExp>            ->  <matExp> <matOp> <matExp> | <expression>
-    <relExp>            ->  <relExp>  <relOp> <Expression>
     <unLogExp>          ->  <unLogOp> <logExp> 
     <exp>               ->  <exp> <expOperator> <termExp> | <termExp> | "("<exp>")"
     <termExp>           ->  <termExp> <termOp> <matExp> 
 
-    // Operators
-
     <matOp>             ->  "^"
     <expOp>             ->  "+" | "-"
     <termOp>            ->  "*" | "/"
-    <logOp>             ->  "and" | "or" | "xor"
-    <unLogOp>           ->  "not"
-
-    // Controll
-
-    <if>                ->  "if" <logExp> <scope> | "if" <relExp> <scope> | <if> <else>
-    <else>              ->  "else" <scope> | "else" <if>
-    //Loop
-
-    // IO
-
-    <IO>                ->  <print> | <put>
-    <in>                ->  "->" <value> ";"
-    <out>               ->  "<-" <id> ";"
+     
 ```
