@@ -168,7 +168,7 @@ log_op        -> [[!] | [and] | [or] | [not] | [xor]
 id            -> ([a-Z] | [_][alfanum]+) ([alfanum] | _ )*
 string        -> ["][~"]*["]
 comment       -> [//][~newline]*[newline]
-booleans      -> ([true] | [false])
+boolean       -> ([true] | [false])
 in            -> [<-]
 out           -> [->]
 block_left    -> [{]
@@ -188,9 +188,7 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 ## BNF
 
 ```
-
-    TODO =  const
-
+    TODO = string
     <program>           ->  <statementList>
     <statementList>     ->  <statement> <statementList'>
     <statementList'>    ->  <statement> <statementList'> | <λ>
@@ -207,12 +205,17 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 
     <type>              ->  "i32" | "i64" | "f32" | "f64" | "bool" | "char"
 
-    <list>              ->  <num><list'> | <booleans><list'> | <float><list'> | <char><list'>
+    <list>              ->  <num><list'> | <boolean><list'> | <float><list'> | <char><list'>
     <list'>             ->  "," <list> | <λ>
     
     <as_op>             -> "=" | "+=" | "-=" | "*=" | "/=" | "++" | "--"
 
+    <rel_op>            -> ">" | "<" | ">=" | "<=" | "==" | "!="
     
+    <ar_op>             -> "+" | "*" | "^" | "-" | "/"
+
+    <log_op>            -> "and" | "or" | "xor" | "not" | "!"
+
     <loop>              ->  <for> <scope> | <forEach> <scope>
     <for>               ->  "for" <assignment> ";" <logExp> ";"  <assign>
     <forEach>           ->  "foeach" <assignment> ":" <id> 
@@ -221,7 +224,7 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 
     <expression>        ->  <cast> <expression> | <logExp> | <relExp> | <id> | <value> | <matExp>
 
-    <logExp>            ->  <unLogExp> <logExp'> | <id> <logExp'> | <boolean> <logExp'> | "("<logExp>")" <logExp'>
+    <logExp>            ->  <logExp'> | <id> <logExp'> | <boolean> <logExp'> | "("<logExp>")" <logExp'>
     <logExp'>           -> <log_op> <logExp> <logExp'> | <λ>
 
     <relExp>            ->  <expression> <rel_op> <expression> | "(" <relExp> ")"
@@ -234,14 +237,9 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     <out>               ->  "->" <expression> ";"
     <in>                ->  "<-" <id> ";"
 
-
-    <logOp>             ->  "and" | "or" | "xor"
-    <unLogOp>           ->  "not"
-     
-
-    <value>             ->  <char> | <number> | <float> | <id>
-
+    <value>             ->  <char> | <number> | <float> | <id> | <boolean>          
     
+    <boolean>           -> "true" | "false"
     <if>                ->  "if" <if'><if''>
     <if'>               ->  <logExp> <scope> | <relExp> <scope>
     <if''>              ->  <else><if''> | <λ>
@@ -255,13 +253,66 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 
     // Expressions
 
-    <matExp>            ->  <matExp> <matOp> <matExp> | <expression>
-    <unLogExp>          ->  <unLogOp> <logExp> 
-    <exp>               ->  <exp> <expOperator> <termExp> | <termExp> | "("<exp>")"
-    <termExp>           ->  <termExp> <termOp> <matExp> 
+    first { 
+        TODO = aplicar terceira regra
+               char/num/float = não terminal??
+        
+        <program>        = {}
+        <statementList>  = {}
+        <statementList'> = {λ}
+        <statement>      = {}
 
-    <matOp>             ->  "^"
-    <expOp>             ->  "+" | "-"
-    <termOp>            ->  "*" | "/"
+
+        <assignment>     = { const, }
+        <assignment'>    = { [, ; }
+        <assignment''>   = { ; }
+
+        <assign>         = {}
+        <assign'>        = { ; }
+
+
+        <type>           = { "i32", "i64", "f32", "f64", "bool", "char" }
+
+        <list>           = {}
+        <list'>          = { ",", λ}
+
+        <as_op>          = { =, +=, -=, *=, /=, ++, -- }
+
+        <rel_op>         = { >, <, >=, <=, ==, != }
+
+        <ar_op>          = { +, -, *, /, ^ }
+
+        <log_op>         = { "and", "or", "xor", "not", "!' }
+
+        <loop>           = {}
+        <for>            = { "for" }
+        <forEach>        = { "foreach" }
+
+        <scope>          = { { }
+
+        <expression>     = {}
+
+        <logExp>         = { ( }
+        <logExp'>        = { λ }
+
+        <relExp>         = { ( }
+
+        <matExp>         = { ( }
+
+        <cast>           = { ( }
+
+        <io>             = {}
+        <out>            = { -> }
+        <in>             = { <- }
+
+        <value>          = {}
+        <boolean>        = { "true", "false" }
+        <if>             = { "if" }
+        <if'>            = {}
+        <if''>           = { λ }
+        <else>           = { "else" }
+        <else'>          = {}
+
+    }
      
 ```
