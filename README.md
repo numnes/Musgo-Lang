@@ -188,7 +188,6 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 ## BNF
 
 ```
-    TODO = string
     <program>           ->  <statementList>
     <statementList>     ->  <statement> <statementList'>
     <statementList'>    ->  <statement> <statementList'> | <λ>
@@ -197,8 +196,9 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     
     <assignment>        -> "const" <type> <id> <assignment'> |<type> <id> <assignment'> | <assign>
     <assignment'>       -> <as_op> <expression> ";" | "[" <num> "]" <assignment''>  | ";"
-    <assignment''>      -> <as_op> "{" <list> "}" ";" | ";"
-    
+    <assignment''>      ->  <as_op> <assignment'''> | ";" 
+    <assignment'''>     -> "{" <list> "}" ";" | <string> ";"
+
     <assign>            ->  <id> <as_op><assign'>
     <assign'>           ->  <expression> ";" | ";"
 
@@ -237,7 +237,7 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     <out>               ->  "->" <expression> ";"
     <in>                ->  "<-" <id> ";"
 
-    <value>             ->  <char> | <number> | <float> | <id> | <boolean>          
+    <value>             ->  <char> | <num> | <float> | <id> | <boolean>          
     
     <boolean>           -> "true" | "false"
     <if>                ->  "if" <if'><if''>
@@ -247,33 +247,24 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     <else'>             ->  <scope> | <if>
 
 
+    first {        
+        <program>        = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <- }
+        <statementList>  = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <- }
+        <statementList'> = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ}
+        <statement>      = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <- }
 
 
-    /*  Daqui pra baixo tá zoado */
-
-    // Expressions
-
-    first { 
-        TODO = aplicar terceira regra
-               char/num/float = não terminal??
-        
-        <program>        = {}
-        <statementList>  = {}
-        <statementList'> = {λ}
-        <statement>      = {}
-
-
-        <assignment>     = { const, }
-        <assignment'>    = { [, ; }
-        <assignment''>   = { ; }
-
-        <assign>         = {}
-        <assign'>        = { ; }
+         <assignment>     = { const, "i32", "i64", "f32", "f64", "bool", "char", id }
+         <assignment'>    = { [, ;, =, +=, -=, *=, /=, ++, -- }
+         <assignment''>   = { ;,  =, +=, -=, *=, /=, ++, -- }
+         <assignment'''>  = { {, string }
+         <assign>         = { id }
+         <assign'>        = { ;, id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^ }
 
 
         <type>           = { "i32", "i64", "f32", "f64", "bool", "char" }
 
-        <list>           = {}
+        <list>           = { num, float, char}
         <list'>          = { ",", λ}
 
         <as_op>          = { =, +=, -=, *=, /=, ++, -- }
@@ -284,35 +275,95 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
 
         <log_op>         = { "and", "or", "xor", "not", "!' }
 
-        <loop>           = {}
+        <loop>           = { "for", "foreach" }
         <for>            = { "for" }
         <forEach>        = { "foreach" }
 
         <scope>          = { { }
 
-        <expression>     = {}
+        <expression>     = { id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^, λ }
 
-        <logExp>         = { ( }
-        <logExp'>        = { λ }
+        <logExp>         = { (, id, "and", "or", "xor", "not", "!', "true", "false", λ }
+        <logExp'>        = { λ, "and", "or", "xor", "not", "!'  }
 
-        <relExp>         = { ( }
+        <relExp>         = { id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^ }
 
-        <matExp>         = { ( }
+        <matExp>         = { id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, +, -, *, /, ^, >, <, >=, <=, ==, != }
 
         <cast>           = { ( }
 
-        <io>             = {}
+        <io>             = { ->, <- }
         <out>            = { -> }
         <in>             = { <- }
 
-        <value>          = {}
+        <value>          = { num, float, char, id }
         <boolean>        = { "true", "false" }
         <if>             = { "if" }
-        <if'>            = {}
-        <if''>           = { λ }
+        <if'>            = { (, id, "and", "or", "xor", "not", "!', "true", "false", {, num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^ }
+        <if''>           = { λ, "else" }
         <else>           = { "else" }
-        <else'>          = {}
+        <else'>          = { {, "if" }
 
+    }
+
+    follow {
+        <program>         
+        <statementList>   
+        <statementList'>  
+        <statement>       
+
+        <assignment>      
+        <assign>
+        <assignment'>     
+        <assignment''>    
+        <assignment'''>   
+
+        <assign>          
+        <assign'>         
+
+        <type>            
+
+        <list>            
+        <list'>           
+
+        <as_op>           
+
+        <rel_op>          
+
+        <ar_op>           
+
+        <log_op>          
+
+        <loop>            
+        <for>             
+        <forEach>         
+
+        <scope>           
+
+        <expression>      
+
+        <logExp>          
+        <logExp'>
+        <logExp'>         
+
+        <relExp>          
+
+        <matExp>          
+
+        <cast>            
+
+        <io>              
+        <out>             
+        <in>              
+
+        <value>           
+
+        <boolean>         
+        <if>              
+        <if'>             
+        <if''>            
+        <else>            
+        <else'>           
     }
      
 ```
