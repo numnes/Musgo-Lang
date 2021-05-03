@@ -307,63 +307,63 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     }
 
     follow {
-        <program>         
-        <statementList>   
-        <statementList'>  
-        <statement>       
+        <program>         = { $ }
+        <statementList>   = { "}", $ }
+        <statementList'>  = { "}", $ }
+        <statement>       = {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }
 
-        <assignment>      
-        <assign>
-        <assignment'>     
-        <assignment''>    
-        <assignment'''>   
+        <assignment>      = { ":", ";", {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }
+       
+        <assignment'>     = { ":", ";", {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }
+        <assignment''>    = { ":", ";", {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }
+        <assignment'''>   = { ":", ";", {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  } 
 
-        <assign>          
-        <assign'>         
+        <assign>          = {  ":", ";", {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }    
+        <assign'>         = {  ":", ";", {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }
 
-        <type>            
+        <type>            = { ")", first(<id>)} 
 
-        <list>            
-        <list'>           
+        <list>            = { "}" }
+        <list'>           = { "}" }
+        
+        <as_op>           = {  id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^, λ , {, string }
 
-        <as_op>           
+        <rel_op>          = {  id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^, λ  }  
+        
+        <ar_op>           = {  id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^, λ  }
 
-        <rel_op>          
+        <log_op>          = {  (, id, "and", "or", "xor", "not", "!', "true", "false", λ  }   
 
-        <ar_op>           
+        <loop>            = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }
+        <for>             = { { }
+        <forEach>         = { { }  
 
-        <log_op>          
+        <scope>           = {  const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $ , λ}
 
-        <loop>            
-        <for>             
-        <forEach>         
+        <expression>      = { >, <, >=, <=, ==, !=,  +, -, *, /, ^, ;, ) }
 
-        <scope>           
+        <logExp>          = { >, <, >=, <=, ==, !=,  +, -, *, /, ^, ;, ,  λ, "and", "or", "xor", "not", "!'  , ), ;, } } 
+        <logExp'>         = {  >, <, >=, <=, ==, !=,  +, -, *, /, ^, ;, ")",  λ, "and", "or", "xor", "not", "!'  , ), ;, }  }     
 
-        <expression>      
+        <relExp>          = { ) ,  >, <, >=, <=, ==, !=,  +, -, *, /, ^, ;, <λ>}  
+        
+        <matExp>          = { ),  >, <, >=, <=, ==, !=,  +, -, *, /, ^, ; }  
+        
+        <cast>            = { { id, (, "and", "or", "xor", "not", "!', "true", "false", num, float, char, >, <, >=, <=, ==, !=, +, -, *, /, ^, λ  }  
 
-        <logExp>          
-        <logExp'>
-        <logExp'>         
+        <io>              = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $ }         
+        <out>             = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }       
+        <in>              = { const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $  }}   
 
-        <relExp>          
+        <value>           = {  >, <, >=, <=, ==, !=,  +, -, *, /, ^, ;, ),  λ }                   
+        
+        <boolean>         = { ",", λ, "}",  λ, "and", "or", "xor", "not", "!",  >, <, >=, <=, ==, !=,  +, -, *, /, ^,  λ, ), ;, }, ),  λ  }
 
-        <matExp>          
-
-        <cast>            
-
-        <io>              
-        <out>             
-        <in>              
-
-        <value>           
-
-        <boolean>         
-        <if>              
-        <if'>             
-        <if''>            
-        <else>            
-        <else'>           
+        <if>              = {   const, "i32", "i64", "f32", "f64", "bool", "char", id, "for", "foreach", "if", ->, <-, λ, "}", $ ,  }  
+        <if'>             = { λ }
+        <if''>            = { λ }  
+        <else>            = { λ }
+        <else'>           = { λ }          
     }
      
 ```
