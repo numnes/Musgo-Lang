@@ -97,6 +97,11 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     state = 21;
                     lexema += c;
                 }
+                else if(c == '\'') 
+                {
+                    state = 53;
+                    lexema += c;
+                }
                 // finais
                 else if(c == ']') //50
                 {
@@ -416,6 +421,36 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "log_op";
                     counter--;
                     state = 0;
+                    add_token(token, lexema, token_list, countLines);
+                }
+            break;
+            case 53:
+                if((c > 20 &&  c <= 125 ))
+                {
+                    state = 54;
+                    lexema += c;
+                }
+                else
+                {
+                    std:: cerr << "Error: Expected a char character after \', got \""<< c << "\" at line " << countLines << "\n";
+                    state = 54;
+                    lexema += 'a';
+                }
+            break;
+            case 54:
+                if(c == '\'')
+                {
+                    token = "char";
+                    state = 0;
+                    lexema+=c;
+                    add_token(token, lexema, token_list, countLines);
+                }
+                else
+                {
+                    std:: cerr << "Error: Expected a \' character after char, got \""<< c << "\" at line " << countLines << "\n";
+                    token = "char";
+                    state = 0;
+                    lexema+=c;
                     add_token(token, lexema, token_list, countLines);
                 }
             break;
