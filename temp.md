@@ -13,7 +13,7 @@ list'               ->    ,  list   |  ϵ
 loop                ->     for    scope   |  forEach    scope  
 for                 ->    "for"  assignment   ;  expression   ;   assign  
 forEach             ->    "foeach"  assignment   :  id   
-scope               ->    {  statementList   }
+scope               ->    {  statementList   }  
 expression          ->     (  expression'  |  value | firstEspression
 expression'         ->      type   )    expression | expression )
 firstEspression     ->      value op expression | log_op    expression |ϵ

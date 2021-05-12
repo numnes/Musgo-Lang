@@ -1,0 +1,30 @@
+"NãoTerminais/Terminais",$,const,(,),",",:,;,{,},[,],"false","true",num,char,float,string,ar_op,log_op,as_op,rel_op,id,type,for,foreach,->,<-,if,else,NULL
+"<assign'>",,,<expression>   ;,,,,;,,,,,"<expression>   ;","<expression>   ;",<expression>   ;,<expression>   ;,<expression>   ;,,,<expression>   ;,,,<expression>   ;,,,,,,,,NULL
+"<assign>",,,,,,,,,,,,,,,,,,,,,,id    <as_op>   <assign'>,,,,,,,,NULL
+"<assignment'''>",,,,,,,,{  <list>   } ;,,,,,,,,,<string>   ;,,,,,,,,,,,,,NULL
+"<assignment''>",,,,,,,;,,,,,,,,,,,,,<as_op>    <assignment'''>,,,,,,,,,,NULL
+"<assignment'>",,,,,,,;,,,[  num   ]  <assignment''>,,,,,,,,,,<as_op>    <expression>   ;,,,,,,,,,,NULL
+"<assignment>",,"const  <type>    id    <assignment'> ",,,,,,,,,,,,,,,,,,,,"<assign>  "," <type>    id    <assignment'> ",,,,,,,NULL
+"<boolean>",,,,,,,,,,,,"false","true",,,,,,,,,,,,,,,,,NULL
+"<else'>",,,,,,,,{ <statementList>  },,,,,,,,,,,,,,,,,,,,if <if'><if''>,,NULL
+"<else>",ϵ,ϵ,,,,ϵ,ϵ,,ϵ,,,,,,,,,,,,,ϵ,ϵ,ϵ,ϵ,ϵ,ϵ,ϵ,"else  <else'>   ",NULL
+"<expression>",,," (  <expression'>",,,,,,,,,"value <expression''>","value <expression''>",value <expression''>,value <expression''>,value <expression''>,,,<log_op>  <expression>,,,<value> <expression''>,,,,,,,,NULL
+"<expression' >",,,,,,,,,,,," <expression> )"," <expression> )"," <expression> )"," <expression> )"," <expression> )",,," <expression> )",,," <expression> )",<type>   )    <expression>,,,,,,,NULL
+"<expression''>",,,,ϵ,,,ϵ,ϵ,,,,,,,,,,<op> <expression>,<op> <expression>,,<op> <expression>,,,,,,,,,NULL
+"<for>",,,,,,,,,,,,,,,,,,,,,,,,for  <assignment>   ;  <expression>   ;   <assign>,,,,,,NULL
+"<forEach>",,,,,,,,,,,,,,,,,,,,,,,,,"foeach  <assignment>   :  id   ",,,,,NULL
+"<if'>",,,<expression>  <scope>,,,,,,,,,"<expression>  <scope>","<expression>  <scope>",<expression>  <scope>,<expression>  <scope>,<expression>  <scope>,,,<expression>  <scope>,,,<expression>  <scope>,,,,,,,,NULL
+"<if>",,,,,,,,,,,,,,,,,,,,,,,,,,,,if  <if'>   <if''>,,NULL
+"<in>",,,,,,,,,,,,,,,,,,,,,,,,,,," <-  id   ;",,,NULL
+"<io>",,,,,,,,,,,,,,,,,,,,,,,,,,<out>,<in>,,,NULL
+"<list'>",,,,,",  <list>",,,,ϵ,,,,,,,,,,,,,,,,,,,,,NULL
+"<list>",,,,,,,,,,,,"<boolean>   <list'> ","<boolean>   <list'> "," num   <list'> ",char   <list'>,float   <list'>,,,,,,,,,,,,,,NULL
+"<loop>",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,NULL
+"<op>",,,,,,,,,,,,,,,,,,ar_op,log_op,,rel_op,,,,,,,,,NULL
+"<out>",,,,,,,,,,,,,,,,,,,,,,,,,,->  expression   ;,,,,NULL
+"<program>",,<statementList>,,,,,,,,,,,,,,,,,,,,<statementList>,<statementList>,<statementList>,<statementList>,<statementList>,<statementList>,<statementList>,,NULL
+"<scope>",,,,,,,,{ <statementList> },,,,,,,,,,,,,,,,,,,,,,NULL
+"<statement>",,<assignment>,,,,,,,,,,,,,,,,,,,,<assignment>,<assignment>,<loop>,<loop>,"<io>  ","<io>  "," if ",,NULL
+"<statementList'>",ϵ,<statement> <statementList'>,,,,,,,ϵ,,,,,,,,,,,,,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,,NULL
+"<statementList>",,<statement> <statementList'>,,,,,,,,,,,,,,,,,,,,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,<statement>    <statementList'>,,NULL
+"<value>",,,,,,,,,,,,"<boolean> ","<boolean> ",num,char,float,,,,,,id,,,,,,,,NULL
