@@ -59,6 +59,7 @@
         "optional": "cpp",
         "random": "cpp",
         "string_view": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "map": "cpp"
     }
 }

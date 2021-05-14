@@ -3,10 +3,11 @@
 #include <unordered_map>
 #include <string>
 #include <sstream>
-#include <algorithm>    // std::find
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <list>
+#include <deque>
 
 // Função que separa uma string dividida em espaços em tokens
 std::vector<std::string> splitStr(std::string str){
@@ -14,23 +15,29 @@ std::vector<std::string> splitStr(std::string str){
     int s = str.length();
     int fSpace = str.find(" ");
     int iSpace = fSpace;
-    retList.push_back(str.substr(0, fSpace));
+    int fSep = fSpace;
+    std::string firstS = str.substr(0, fSpace);
+    if(firstS != "" && firstS != " ")
+        retList.push_back(firstS);
     while((fSpace = str.find(" ", iSpace+1)) != std::string::npos){
         if(fSpace == (iSpace+1)){
             iSpace = fSpace;
             continue;
         }
-        retList.push_back(str.substr(iSpace+1, (fSpace - iSpace)-1));
+        std::string res = str.substr(iSpace+1, (fSpace - iSpace)-1);
+        if(res != "" && res != " ")
+            retList.push_back(res);
         iSpace = fSpace;
     }
+
     return retList;
 }
 
-int main()
+void sint_processing(std::deque<Production> productions)
 {
     std::string line;
     std::string line2;
-    std::ifstream myfile("tabelaPreditiva.csv");
+    std::ifstream myfile("Tabela_Preditiva.csv");
     std::getline(myfile, line);
 
     // Não terminais
@@ -42,14 +49,10 @@ int main()
     std::stringstream sline(line);
     while (std::getline(sline, line2, ',')){
         if(exFirst)
-            Nterminais.push_back(line2);
+            Terminais.push_back(line2);
         exFirst = true;
     }
-    
-    for(auto a: Nterminais){
-        std::cout << a << std::endl;
-    }
-    
+     
     std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string> > > Table;
 
     while (std::getline(myfile, line))
@@ -75,46 +78,66 @@ int main()
                 exFirst = false;
             }
             else
-                derivationsUnp.push_back(line2);
+                derivationsUnp.push_back(line2+" ");
         }
 
-        for(auto d : derivationsUnp)
-            derivations.push_back(splitStr(d));
+        for(auto d : derivationsUnp){
+            std::vector<std::string> a = splitStr(d);
+            derivations.push_back(a);
+        }
         
-        for(int i = 0; i < Nterminais.size(); i++)
-            derivationList.insert(std::make_pair(Nterminais[i], derivations[i]));
+        for(int i = 0; i < Terminais.size(); i++){
+            derivationList.insert(std::make_pair(Terminais[i], derivations[i]));
+        }
         
-        Terminais.push_back(tableKey);
+        Nterminais.push_back(tableKey);
         Table.insert(std::make_pair(tableKey, derivationList));
     }
 
     std::vector<std::string> Pheap;
-    std::vector<std::string> entry;
 
-    Pheap.push_back(Nterminais[0]);
+    Pheap.push_back("$");
+    Pheap.push_back("program");
 
+    Production p = {"$", " ", -1};
+    productions.push_back(p);
+    
     while(!Pheap.empty()){
-        if( std::find(Terminais.begin(), Terminais.end(), *(Pheap.begin())) != Terminais.end() ){
-            if((*(Pheap.end()-1)) == *(entry.begin())){
-                Pheap.erase((Pheap.end()-1));
-                entry.erase(entry.begin());
+        std::cout << "================================== heap\n";
+        for( auto a: Pheap)
+            std::cout << "[" << a << "] ";
+        std::cout << "\n";
+        std::cout << "================================== entry\n";
+        for( auto a: productions)
+            std::cout << "[" << a.token << "] ";
+        std::cout << "\n";
+        std::string X = Pheap.back();
+        std::string A = productions.front().token;
+
+        if( std::find(Terminais.begin(), Terminais.end(), X) != Terminais.end()){
+            if( X == A ){
+                Pheap.pop_back();
+                productions.pop_front();
             }
             else{
-                std::cout << "Erro1";
+                std::cout << "Erro 1"<< productions.front().line << "\n";
                 break;
             }
         }
         else{
-            if( Table[ (*(Pheap.end()-1)) ].find((*(entry.begin()))) !=  Table[ (*(Pheap.end()-1)) ].end()){
-                Pheap.erase((Pheap.end()-1));
-                for(int i = Table[(*(Pheap.end()-1))][(*(entry.begin()))].size()-1; i >= 0; i--)
-                    Pheap.push_back(Table[(*(Pheap.end()-1))][(*(entry.begin()))][i]);
+            if(!Table[X][A].empty()){
+                Pheap.pop_back();
+                for(auto rit =  Table[X][A].rbegin(); rit != Table[X][A].rend(); rit++){
+                    if(*rit != "ϵ")    
+                        Pheap.push_back(*rit);
+                }
             }
             else{
-                std::cout << "Erro2";
+                std::cout << "Erro 2" << productions.front().line << "\n";
                 break;
             }
         }
-    }   
-    return 0;
+
+    }
+    return;
 }

@@ -7,20 +7,30 @@
 #include <iostream>
 #include <list>
 
-std::list<std::string> splitStr(std::string str){
-    std::list<std::string> retList;
+std::vector<std::string> splitStr(std::string str){
+    std::vector<std::string> retList;
     int s = str.length();
     int fSpace = str.find(" ");
     int iSpace = fSpace;
-    retList.push_back(str.substr(0, fSpace));
+    std::string firstS = str.substr(0, fSpace);
+    if(firstS != "" && firstS != " ")
+        retList.push_back(firstS);
     while((fSpace = str.find(" ", iSpace+1)) != std::string::npos){
         if(fSpace == (iSpace+1)){
             iSpace = fSpace;
             continue;
         }
-        retList.push_back(str.substr(iSpace+1, (fSpace - iSpace)-1));
+        std::string res = str.substr(iSpace+1, (fSpace - iSpace)-1);
+        if(res != "" && res != " ")
+            retList.push_back(res);
         iSpace = fSpace;
     }
+    std::cout <<  iSpace << " " << str[iSpace] << "\n";
+    if(iSpace < str.length()-1 && str[iSpace+1] != ' '){
+        firstS = str.substr(iSpace+1, str.length()-1);
+        retList.push_back(firstS);
+    }
+
     return retList;
 }
 
@@ -29,12 +39,11 @@ std::list<std::string> splitStr(std::string str){
 
 int main()
 {
-    std::vector<int> a;
+    std::string s = "as_op    expression   semicolon";
 
-    for(auto i:{1,2,3,4,5,6})
-        a.push_back(i);
-
-    std::cout << *(a.end()-1) << "\n";
+    for( auto a : splitStr(s))
+        std::cout << "[" << a << "] ";
+    puts("");
 
 
 }
