@@ -453,7 +453,7 @@ std::deque< Production > lex_processing(const char musgonizer[], int length ){
                     token = "char";
                     state = 0;
                     lexema+=c;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 else
                 {
@@ -461,7 +461,7 @@ std::deque< Production > lex_processing(const char musgonizer[], int length ){
                     token = "char";
                     state = 0;
                     lexema+='\'';
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
             break;
         }

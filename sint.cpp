@@ -110,7 +110,7 @@ void sint_processing(std::deque<Production> productions)
         std::cout << "================================== entry\n";
         for( auto a: productions)
             std::cout << "[" << a.token << "] ";
-        std::cout << "\n";
+        std::cout << "\n\n";
         std::string X = Pheap.back();
         std::string A = productions.front().token;
 
@@ -120,7 +120,7 @@ void sint_processing(std::deque<Production> productions)
                 productions.pop_front();
             }
             else{
-                std::cout << "Erro 1"<< productions.front().line << "\n";
+                std::cout << "Erro 1 "<< productions.front().line << "\n";
                 break;
             }
         }
@@ -133,7 +133,7 @@ void sint_processing(std::deque<Production> productions)
                 }
             }
             else{
-                std::cout << "Erro 2" << productions.front().line << "\n";
+                std::cout << "Erro 2 " << productions.front().line << "\n";
                 break;
             }
         }
