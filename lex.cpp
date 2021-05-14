@@ -450,7 +450,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     std:: cerr << "Error: Expected a \' character after char, got \""<< c << "\" at line " << countLines << "\n";
                     token = "char";
                     state = 0;
-                    lexema+=c;
+                    lexema+='\'';
                     add_token(token, lexema, token_list, countLines);
                 }
             break;
