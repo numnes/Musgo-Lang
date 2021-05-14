@@ -1,13 +1,13 @@
-i32 menor = 0;
+i32 menor;
 const char a = 'a';
 char b[6] = "string";
-i32 vetor[4] = {10,20,40,50};
+i32 vetor[4] = {10 , 20,40,50};
 f64 f = 3.4445;
 <- f;
 
 // foreach
 foreach x: vetor {
-    if x < menor {
+    if x + 1 < menor {
         menor = x;
     }
 }

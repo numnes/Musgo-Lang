@@ -102,15 +102,30 @@ void sint_processing(std::deque<Production> productions)
     Production p = {"$", " ", -1};
     productions.push_back(p);
     
+    std::unordered_map<std::string, std::string> dictTerm =  {
+        {"semicolon",";"},
+        {"colon",":"},
+        {"bracket_left","["},
+        {"bracket_right","]"},
+        {"block_left","{"},
+        {"block_right","}"},
+        {"par_left","("},
+        {"par_right",")"},
+        {"comma",","},
+        {"in","<-"},
+        {"out","->"}
+    };
+
+
     while(!Pheap.empty()){
-        std::cout << "================================== heap\n";
-        for( auto a: Pheap)
-            std::cout << "[" << a << "] ";
-        std::cout << "\n";
-        std::cout << "================================== entry\n";
-        for( auto a: productions)
-            std::cout << "[" << a.token << "] ";
-        std::cout << "\n\n";
+        // std::cout << "================================== heap\n";
+        // for( auto a: Pheap)
+        //     std::cout << "[" << a << "] ";
+        // std::cout << "\n";
+        // std::cout << "================================== entry\n";
+        // for( auto a: productions)
+        //     std::cout << "[" << a.token << "] ";
+        // std::cout << "\n\n";
         std::string X = Pheap.back();
         std::string A = productions.front().token;
 
@@ -120,8 +135,10 @@ void sint_processing(std::deque<Production> productions)
                 productions.pop_front();
             }
             else{
-                std::cout << "Erro 1 "<< productions.front().line << "\n";
-                break;
+                std::cout << "Não era esperado o token " << A << " na linha " << productions.front().line
+                << ". Esperava-se: [ " << dictTerm[X] << " ]\n\n";
+                
+                productions.pop_front();
             }
         }
         else{
@@ -133,8 +150,16 @@ void sint_processing(std::deque<Production> productions)
                 }
             }
             else{
-                std::cout << "Erro 2 " << productions.front().line << "\n";
-                break;
+                std::cout << "Não era esperado o token " << A << " na linha " << productions.front().line
+                << ". Esperava-se uma das produções a seguir: \n";
+                
+                for (auto a : Table[X])
+                    if(a.second.size() != 0)
+                        if(a.first != "$" && a.first != " ")
+                            std::cout << "  [ " << ((dictTerm.count(a.first))? (dictTerm[a.first]) : (a.first)) << " ] ";
+                    
+                std::cout << "\n\n";
+                productions.pop_front();
             }
         }
 
