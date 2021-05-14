@@ -3,17 +3,25 @@
 #include <vector>
 #include <unordered_set>
 #include <string>
+#include <map>
+#include <deque>
+#include "Production.cpp"
 
-void add_token(const std::string &token, const std::string &lexema, std::vector<std::string> &list, int countLines) 
+
+void add_token(const std::string &token, const std::string &lexema, std::vector<std::string> &list, int countLines, std::deque<Production> &productions) 
 {    
     std::string aux = "[" + token + "," + lexema + "," + std::to_string(countLines) + "]";
+
+    Production p = {token, lexema, countLines};
+
+    productions.push_back(p);
     list.push_back(aux);
 }
 
 
 std::string get_token(const std::string &lexema)
 {
-    std::unordered_set<std::string> reserved = {"const", "if", "else", "for", "foreach"};
+    std::unordered_set<std::string> reserved = { "const", "for", "foreach", "if", "else"};
     std::unordered_set<std::string> logic_ops = {"xor", "not", "or", "and"};
     std::unordered_set<std::string> types = {"i32", "i64", "f32", "f64", "bool", "char"};
 
@@ -32,12 +40,14 @@ std::string get_token(const std::string &lexema)
 }
 
 inline
-std::vector<std::string> lex_processing(const char musgonizer[], int length ){ 
+std::deque< Production > lex_processing(const char musgonizer[], int length ){ 
     int state = 0;
     int counter = 0;
     int countLines = 1;
     std::string token;
     std::string lexema;
+
+    std::deque<Production> productions;
 
     std::vector<std::string> token_list;
 
@@ -108,77 +118,77 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "bracket_right";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '[') //49
                 {
                     token = "bracket_left";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '(') //32
                 {
                     token = "par_left";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == ')') //33
                 {
                     token = "par_right";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '{') //28
                 {
                     token = "block_left";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '}') //29
                 {
                     token = "block_right";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == ':') //19
                 {
                     token = "colon";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == ';') //48
                 {
                     token = "semicolon";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == ',') //51
                 {
                     token = "comma";
                     lexema = c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 else if(c == '^') //10
                 {
                     token = "ar_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '%') //10
                 {
                     token = "ar_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '\n' || c == '\t' || c == ' ' || (int) c == 13) //47
                 {
@@ -196,21 +206,21 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "out";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '-' || c == '=') //3+4
                 {
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else //5
                 {
                     token = "ar_op";
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 } 
             break;
             case 6:
@@ -219,14 +229,14 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else //9
                 {
                     token = "ar_op";
                     state = 0;
                     counter--;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
             break;
             case 11:
@@ -235,14 +245,14 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else //13
                 {
                     token = "ar_op";
                     state = 0;
                     counter--;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
             break;
             case 14:
@@ -258,7 +268,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "num";
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
             break;
             case 15:
@@ -280,7 +290,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "float";
                     counter--;
                     state = 0;
-                    add_token(token, lexema ,token_list, countLines);
+                    add_token(token, lexema ,token_list, countLines, productions);
                 }
             break;
             case 20:
@@ -304,7 +314,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = get_token(lexema);
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
             break;
             case 23:
@@ -318,14 +328,14 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "as_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 else //27
                 {
                     token = "ar_op";
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
             break;
             case 24:
@@ -345,7 +355,7 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "string";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 else 
                 {
@@ -358,14 +368,14 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 else //36
                 {
                     token = "rel_op";
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
             break;
             case 37:
@@ -374,14 +384,14 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list,  countLines);
+                    add_token(token, lexema, token_list,  countLines, productions);
                 }
                 else //39
                 {
                     token = "as_op";
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
             break;
             case 40:
@@ -390,21 +400,21 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines); 
+                    add_token(token, lexema, token_list, countLines, productions); 
                 }
                 else if(c == '-') //42
                 {
                     token = "in";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 else //43
                 {
                     token = "rel_op";
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 
             break;
@@ -414,14 +424,14 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
                     token = "rel_op";
                     lexema += c;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
                 else //46
                 {
                     token = "log_op";
                     counter--;
                     state = 0;
-                    add_token(token, lexema, token_list, countLines);
+                    add_token(token, lexema, token_list, countLines, productions);
                 }
             break;
             case 53:
@@ -456,5 +466,10 @@ std::vector<std::string> lex_processing(const char musgonizer[], int length ){
             break;
         }
     }
-    return token_list;
+
+    // for(auto a: productions)
+    //     std::cout << a.token << "\n";
+
+
+    return productions;
 }

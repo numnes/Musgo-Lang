@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "lex.cpp"
+#include "sint.cpp"
 
 int main(int argc, char* argv[]){
     
@@ -29,8 +30,11 @@ int main(int argc, char* argv[]){
 
     auto token_list = lex_processing(musgonizer, length);
 
+    sint_processing(token_list);
+
+
     //Print mode
-    if (argc > 2 and argv[2][1] == 'p')
-        for(auto x : token_list)
-            std::cout << x << "\n";
+    // if (argc > 2 and argv[2][1] == 'p')
+    //     for(auto x : token_list)
+    //         std::cout << x << "\n";
 }
