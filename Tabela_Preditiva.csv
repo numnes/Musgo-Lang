@@ -10,9 +10,9 @@ assignment,,const  type    id    assignment'  ,,,,,,,,,,,,,,,,,,,,assign   ,type
 boolean,,,,,,,,,,,,false,true,,,,,,,,,,,,,,,,
 else',,,,,,,,block_left statementList block_right,,,,,,,,,,,,,,,,,,,,_if,
 _else,ϵ,ϵ,,,,,,,ϵ,,,,,,,,,,,,,ϵ,ϵ,ϵ,ϵ,ϵ,ϵ,ϵ,else  else'    
-expression,,,par_left  expression' ,,,,,,,,,value expression'',value expression'',value expression'',value expression'',value expression'',,,log_op  expression,,,value expression''  ,,,,,,,
+expression,,,par_left  expression ,,,,,,,,,value expression'',value expression'',value expression'',value expression'',value expression'',,,log_op  expression,,,value expression''  ,,,,,,,
  expression'  ,,,,,,,,,,,,expression par_right ,expression par_right ,expression par_right ,expression par_right ,expression par_right ,,,expression par_right ,,,expression par_right ,type   par_right    expression,,,,,,
-expression'',,,,ϵ,,,ϵ,ϵ,,bracket_left expression bracket_right expression'',ϵ,,,,,,,op expression,op expression,,op expression,,,,,,,,
+expression'',,,,par_right,,,ϵ,ϵ,,bracket_left expression bracket_right expression'',ϵ,,,,,,,op expression,op expression,,op expression,,,,,,,,
 _for,,,,,,,,,,,,,,,,,,,,,,,,for  id as_op value   semicolon  expression   semicolon   id as_op,,,,,
 _foreach,,,,,,,,,,,,,,,,,,,,,,,,,foreach  id colon  id    ,,,,
 if',,,expression  scope,,,,,,,,,expression  scope,expression  scope,expression  scope,expression  scope,expression  scope,,,expression  scope,,,expression  scope,,,,,,,
