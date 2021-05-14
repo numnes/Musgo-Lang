@@ -21,20 +21,18 @@ void add_token(const std::string &token, const std::string &lexema, std::vector<
 
 std::string get_token(const std::string &lexema)
 {
-    std::unordered_set<std::string> reserved = { "if", "else"};
+    std::unordered_set<std::string> reserved = { "const", "for", "foreach", "if", "else"};
     std::unordered_set<std::string> logic_ops = {"xor", "not", "or", "and"};
     std::unordered_set<std::string> types = {"i32", "i64", "f32", "f64", "bool", "char"};
 
     std::string token;
 
     if(reserved.count(lexema))
-        token = "_"+lexema;
+        token = lexema;
     else if(logic_ops.count(lexema))
         token = "log_op";
     else if(types.count(lexema))
         token = "type";
-    else if(lexema == "const" || lexema == "for" || lexema == "foreach")
-        token = lexema;
     else
         token = "id";
     
