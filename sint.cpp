@@ -101,6 +101,7 @@ void sint_processing(std::deque<Production> productions)
 
     Production p = {"$", " ", -1};
     productions.push_back(p);
+    bool error = false;
     
     std::unordered_map<std::string, std::string> dictTerm =  {
         {"semicolon",";"},
@@ -138,7 +139,7 @@ void sint_processing(std::deque<Production> productions)
                 std::cout << "\033[1;31mNão era esperado o token \033[0m" << 
                 dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << productions.front().line
                 << "\033[0m\033[1;31m. Esperava-se:  \033[0m\033[1;34m" << dictTerm[X] << "\033[0m \n\n";
-                
+                error = true;
                 productions.pop_front();
             }
         }
@@ -159,12 +160,13 @@ void sint_processing(std::deque<Production> productions)
                     if(a.second.size() != 0)
                         if(a.first != "$" && a.first != " " && a.first[0] != 13)
                             std::cout << "  \033[1;34m" << ((dictTerm.count(a.first))? (dictTerm[a.first]) : (a.first))  << " \033[0m ";                
-                    
+                error = true;
                 std::cout << "\n\n";
                 productions.pop_front();
             }
         }
-
     }
+    if(!error)
+         std::cout << "\033[1;32m Nenhum erro encontrado!\033[0m\n";
     return;
 }
