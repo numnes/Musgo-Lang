@@ -135,8 +135,9 @@ void sint_processing(std::deque<Production> productions)
                 productions.pop_front();
             }
             else{
-                std::cout << "Não era esperado o token " << A << " na linha " << productions.front().line
-                << ". Esperava-se: [ " << dictTerm[X] << " ]\n\n";
+                std::cout << "\033[1;31mNão era esperado o token \033[0m" << 
+                dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << productions.front().line
+                << "\033[0m\033[1;31m. Esperava-se:  \033[0m\033[1;34m" << dictTerm[X] << "\033[0m \n\n";
                 
                 productions.pop_front();
             }
@@ -150,13 +151,14 @@ void sint_processing(std::deque<Production> productions)
                 }
             }
             else{
-                std::cout << "Não era esperado o token " << A << " na linha " << productions.front().line
-                << ". Esperava-se uma das produções a seguir: \n";
+                std::cout << "\033[1;31mNão era esperado o token \033[0m" <<
+                dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << productions.front().line
+                << "\033[0m\033[1;31m. Esperava-se uma das produções a seguir: \033[0m\n";
                 
                 for (auto a : Table[X])
                     if(a.second.size() != 0)
-                        if(a.first != "$" && a.first != " ")
-                            std::cout << "  [ " << ((dictTerm.count(a.first))? (dictTerm[a.first]) : (a.first)) << " ] ";
+                        if(a.first != "$" && a.first != " " && a.first[0] != 13)
+                            std::cout << "  \033[1;34m" << ((dictTerm.count(a.first))? (dictTerm[a.first]) : (a.first))  << " \033[0m ";                
                     
                 std::cout << "\n\n";
                 productions.pop_front();
