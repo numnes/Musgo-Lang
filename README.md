@@ -244,6 +244,4 @@ reserved      -> [for] | [foreach] | [if] | [else] | [const]
     <if'>               ->  <logExp> <scope> | <relExp> <scope>
     <if''>              ->  <else><if''> | <λ>
     <else>              ->  "else" <else'> 
-    <else'>             ->  <scope> | <if>
-
-     
+    <else'>             ->  <scope> | <if> 
