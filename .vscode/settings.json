@@ -61,5 +61,10 @@
         "string_view": "cpp",
         "sstream": "cpp",
         "map": "cpp"
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#083429",
+        "titleBar.activeBackground": "#0C4939",
+        "titleBar.activeForeground": "#F2FDFA"
     }
 }
