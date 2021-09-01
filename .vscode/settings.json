@@ -1,5 +1,9 @@
 {
     "files.associations": {
+        ".sequelizerc": "javascript",
+        ".stylelintrc": "json",
+        ".prettierrc": "json",
+        "*.tsx": "typescriptreact",
         "xhash": "cpp",
         "unordered_set": "cpp",
         "cmath": "cpp",
@@ -60,7 +64,8 @@
         "random": "cpp",
         "string_view": "cpp",
         "sstream": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "compare": "cpp"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#083429",
