@@ -63,7 +63,10 @@ CMAKE_BINARY_DIR = /home/nunes/dev/Musgo-Lang
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/musgolang.dir/all
+all: CMakeFiles/MUSGO.dir/all
+all: CMakeFiles/FrontEnd.dir/all
+all: CMakeFiles/Analyzer.dir/all
+all: CMakeFiles/Compiler.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +74,117 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/musgolang.dir/clean
+clean: CMakeFiles/MUSGO.dir/clean
+clean: CMakeFiles/FrontEnd.dir/clean
+clean: CMakeFiles/Analyzer.dir/clean
+clean: CMakeFiles/Compiler.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/musgolang.dir
+# Target rules for target CMakeFiles/MUSGO.dir
 
 # All Build rule for target.
-CMakeFiles/musgolang.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/musgolang.dir/build.make CMakeFiles/musgolang.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/musgolang.dir/build.make CMakeFiles/musgolang.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nunes/dev/Musgo-Lang/CMakeFiles --progress-num=1,2 "Built target musgolang"
-.PHONY : CMakeFiles/musgolang.dir/all
+CMakeFiles/MUSGO.dir/all: CMakeFiles/FrontEnd.dir/all
+CMakeFiles/MUSGO.dir/all: CMakeFiles/Analyzer.dir/all
+CMakeFiles/MUSGO.dir/all: CMakeFiles/Compiler.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MUSGO.dir/build.make CMakeFiles/MUSGO.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MUSGO.dir/build.make CMakeFiles/MUSGO.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nunes/dev/Musgo-Lang/CMakeFiles --progress-num=11,12 "Built target MUSGO"
+.PHONY : CMakeFiles/MUSGO.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/musgolang.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/musgolang.dir/all
+CMakeFiles/MUSGO.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 12
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/MUSGO.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 0
-.PHONY : CMakeFiles/musgolang.dir/rule
+.PHONY : CMakeFiles/MUSGO.dir/rule
 
 # Convenience name for target.
-musgolang: CMakeFiles/musgolang.dir/rule
-.PHONY : musgolang
+MUSGO: CMakeFiles/MUSGO.dir/rule
+.PHONY : MUSGO
 
 # clean rule for target.
-CMakeFiles/musgolang.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/musgolang.dir/build.make CMakeFiles/musgolang.dir/clean
-.PHONY : CMakeFiles/musgolang.dir/clean
+CMakeFiles/MUSGO.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MUSGO.dir/build.make CMakeFiles/MUSGO.dir/clean
+.PHONY : CMakeFiles/MUSGO.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/FrontEnd.dir
+
+# All Build rule for target.
+CMakeFiles/FrontEnd.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FrontEnd.dir/build.make CMakeFiles/FrontEnd.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FrontEnd.dir/build.make CMakeFiles/FrontEnd.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nunes/dev/Musgo-Lang/CMakeFiles --progress-num=5,6,7,8,9,10 "Built target FrontEnd"
+.PHONY : CMakeFiles/FrontEnd.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/FrontEnd.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/FrontEnd.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 0
+.PHONY : CMakeFiles/FrontEnd.dir/rule
+
+# Convenience name for target.
+FrontEnd: CMakeFiles/FrontEnd.dir/rule
+.PHONY : FrontEnd
+
+# clean rule for target.
+CMakeFiles/FrontEnd.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FrontEnd.dir/build.make CMakeFiles/FrontEnd.dir/clean
+.PHONY : CMakeFiles/FrontEnd.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/Analyzer.dir
+
+# All Build rule for target.
+CMakeFiles/Analyzer.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Analyzer.dir/build.make CMakeFiles/Analyzer.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Analyzer.dir/build.make CMakeFiles/Analyzer.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nunes/dev/Musgo-Lang/CMakeFiles --progress-num=1,2 "Built target Analyzer"
+.PHONY : CMakeFiles/Analyzer.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/Analyzer.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Analyzer.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 0
+.PHONY : CMakeFiles/Analyzer.dir/rule
+
+# Convenience name for target.
+Analyzer: CMakeFiles/Analyzer.dir/rule
+.PHONY : Analyzer
+
+# clean rule for target.
+CMakeFiles/Analyzer.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Analyzer.dir/build.make CMakeFiles/Analyzer.dir/clean
+.PHONY : CMakeFiles/Analyzer.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/Compiler.dir
+
+# All Build rule for target.
+CMakeFiles/Compiler.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nunes/dev/Musgo-Lang/CMakeFiles --progress-num=3,4 "Built target Compiler"
+.PHONY : CMakeFiles/Compiler.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/Compiler.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Compiler.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nunes/dev/Musgo-Lang/CMakeFiles 0
+.PHONY : CMakeFiles/Compiler.dir/rule
+
+# Convenience name for target.
+Compiler: CMakeFiles/Compiler.dir/rule
+.PHONY : Compiler
+
+# clean rule for target.
+CMakeFiles/Compiler.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/clean
+.PHONY : CMakeFiles/Compiler.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

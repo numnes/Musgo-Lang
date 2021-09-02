@@ -1,3 +1,9 @@
-a.exe
-lex.exe
-main.exe
+# Executables
+MUSGO
+
+# Folders
+/CMakeFiles
+
+# Files
+CMakeCache.txt
+cmake_install.cmake
