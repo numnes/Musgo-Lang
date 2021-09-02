@@ -7,4 +7,4 @@
 
 Musgo_lang é uma linguagem criada para disciplina de compiladores no curso de Ciência da Computação da Unioeste. É fortemente tipada e estática, imperativa. Tem sua sintaxe inspirada em C/C++ e Rust.
 
-[Documentação][https://github.com/matheusnunesismael/musgo-lang/blob/refactored/doc.md]
+[Documentação](https://github.com/matheusnunesismael/musgo-lang/blob/refactored/doc.md)
