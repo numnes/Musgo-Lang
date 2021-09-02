@@ -8,39 +8,20 @@
 #include <iostream>
 #include <list>
 #include <deque>
+#include "../Utils/Utils.cpp"
+#include "../Types/Production.cpp"
+#include "Syntatic.h"
 
-// Função que separa uma string dividida em espaços em tokens
-std::vector<std::string> splitStr(std::string str)
+Syntatic::Syntatic(std::deque<Production> _productions)
 {
-  std::vector<std::string> retList;
-  int s = str.length();
-  int fSpace = str.find(" ");
-  int iSpace = fSpace;
-  int fSep = fSpace;
-  std::string firstS = str.substr(0, fSpace);
-  if (firstS != "" && firstS != " ")
-    retList.push_back(firstS);
-  while ((fSpace = str.find(" ", iSpace + 1)) != std::string::npos)
-  {
-    if (fSpace == (iSpace + 1))
-    {
-      iSpace = fSpace;
-      continue;
-    }
-    std::string res = str.substr(iSpace + 1, (fSpace - iSpace) - 1);
-    if (res != "" && res != " ")
-      retList.push_back(res);
-    iSpace = fSpace;
-  }
-
-  return retList;
+  this->productions = _productions;
 }
 
-void sint_processing(std::deque<Production> productions)
+void Syntatic::run()
 {
   std::string line;
   std::string line2;
-  std::ifstream myfile("Tabela_Preditiva.csv");
+  std::ifstream myfile("src/FrontEnd/data/Tabela_Preditiva.csv");
   std::getline(myfile, line);
 
   // Não terminais
@@ -62,6 +43,7 @@ void sint_processing(std::deque<Production> productions)
   while (std::getline(myfile, line))
   {
     std::stringstream sline(line);
+
     exFirst = true;
 
     // Não terminal chave
@@ -89,7 +71,7 @@ void sint_processing(std::deque<Production> productions)
 
     for (auto d : derivationsUnp)
     {
-      std::vector<std::string> a = splitStr(d);
+      std::vector<std::string> a = Utils::splitStr(d);
       derivations.push_back(a);
     }
 
@@ -108,7 +90,7 @@ void sint_processing(std::deque<Production> productions)
   Pheap.push_back("program");
 
   Production p = {"$", " ", -1};
-  productions.push_back(p);
+  this->productions.push_back(p);
   bool error = false;
 
   std::unordered_map<std::string, std::string> dictTerm = {
@@ -135,21 +117,21 @@ void sint_processing(std::deque<Production> productions)
     //     std::cout << "[" << a.token << "] ";
     // std::cout << "\n\n";
     std::string X = Pheap.back();
-    std::string A = productions.front().token;
+    std::string A = this->productions.front().token;
 
     if (std::find(Terminais.begin(), Terminais.end(), X) != Terminais.end())
     {
       if (X == A)
       {
         Pheap.pop_back();
-        productions.pop_front();
+        this->productions.pop_front();
       }
       else
       {
-        std::cout << "\033[1;31mNão era esperado o token \033[0m" << dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << productions.front().line
+        std::cout << "\033[1;31mNão era esperado o token \033[0m" << dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << this->productions.front().line
                   << "\033[0m\033[1;31m. Esperava-se:  \033[0m\033[1;34m" << dictTerm[X] << "\033[0m \n\n";
         error = true;
-        productions.pop_front();
+        this->productions.pop_front();
       }
     }
     else
@@ -165,7 +147,7 @@ void sint_processing(std::deque<Production> productions)
       }
       else
       {
-        std::cout << "\033[1;31mNão era esperado o token \033[0m" << dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << productions.front().line
+        std::cout << "\033[1;31mNão era esperado o token \033[0m" << dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << this->productions.front().line
                   << "\033[0m\033[1;31m. Esperava-se uma das produções a seguir: \033[0m\n";
 
         for (auto a : Table[X])
@@ -174,7 +156,7 @@ void sint_processing(std::deque<Production> productions)
               std::cout << "  \033[1;34m" << ((dictTerm.count(a.first)) ? (dictTerm[a.first]) : (a.first)) << " \033[0m ";
         error = true;
         std::cout << "\n\n";
-        productions.pop_front();
+        this->productions.pop_front();
       }
     }
   }

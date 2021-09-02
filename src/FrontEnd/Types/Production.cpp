@@ -1,3 +1,6 @@
+#ifndef PRODUCTION
+#define PRODUCTION
+
 #include <string>
 typedef struct
 {
@@ -5,3 +8,5 @@ typedef struct
     std::string lex;
     int line;
 } Production;
+
+#endif // !PRODUCTION

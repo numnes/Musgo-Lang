@@ -45,3 +45,37 @@ bool SymbolTable::contains(std::string name)
 {
   return this->table.find(name) != this->table.end();
 }
+
+void SymbolTable::update(std::string name, std::string type, std::string value)
+{
+  if (this->contains(name))
+  {
+    this->table.find(name)->second.type = type;
+    this->table.find(name)->second.value = value;
+  }
+  else
+  {
+    std::cout << "Error: Symbol " << name << " does not exist in the table." << std::endl;
+  }
+}
+
+SymbolParams SymbolTable::get(std::string name)
+{
+  if (this->contains(name))
+  {
+    return this->table.find(name)->second;
+  }
+  else
+  {
+    std::cout << "Error: Symbol " << name << " does not exist in the table." << std::endl;
+    return SymbolParams("", "");
+  }
+}
+
+void SymbolTable::print()
+{
+  for (auto &symbol : this->table)
+  {
+    std::cout << symbol.first << ": " << symbol.second.type << " " << symbol.second.value << std::endl;
+  }
+}

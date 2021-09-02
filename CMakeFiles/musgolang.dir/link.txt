@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/musgolang.dir/main.cpp.o -o musgolang 
