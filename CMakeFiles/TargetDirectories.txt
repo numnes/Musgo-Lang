@@ -1,6 +1,0 @@
-/home/nunes/dev/Musgo-Lang/CMakeFiles/rebuild_cache.dir
-/home/nunes/dev/Musgo-Lang/CMakeFiles/MUSGO.dir
-/home/nunes/dev/Musgo-Lang/CMakeFiles/edit_cache.dir
-/home/nunes/dev/Musgo-Lang/CMakeFiles/FrontEnd.dir
-/home/nunes/dev/Musgo-Lang/CMakeFiles/Analyzer.dir
-/home/nunes/dev/Musgo-Lang/CMakeFiles/Compiler.dir
