@@ -10,7 +10,7 @@ Musgo_lang é uma linguagem criada para disciplina de compiladores no curso de C
 Mais detalher sobre a linguagem podem ser encontrados na [neste documento](https://github.com/matheusnunesismael/musgo-lang/blob/main/doc.md) de especificação.
 <br/>
 
-#### Compilação do compilador
+### Compilação do compilador
 
 O compilador da linguagem foi escrito em C++. A geração do executável do compilador pode ser feita rápidamente, utilizando o CMake será gerado o arquino Makefile mais adequado para seu sistema, assim basta acessar a pasta raiz do repositório e executar:
 
@@ -24,18 +24,18 @@ Com o arquivo Makefile gerado basta executar o make para gerar o executável:
 $# make
 ```
 
-Assim o executável do compilador chamado MUSGO será gerado.
+Assim o executável do compilador chamado **MUSGO** será gerado na pasta raiz e estará pronto para ser usado 😊.
 <br/>
 
-#### Utilização
+### Utilização
 
-Para compilar um código em Musgo basta executar o compilador passando o caminho para o script a ser compilado, este repositório possúi dois arquivos de exemplo na pasta data.
+Para compilar um código em Musgo_lang basta executar o compilador passando o caminho para o arquivo do script, este repositório possúi dois arquivos de exemplo na pasta **data**.
 
 ```
 $# ./MUSGO data/main.mg
 ```
 
-## Mais instruções serão adicionadas aqui futuramente
+#### 🚧 Mais instruções serão adicionadas futuramente 🚧
 
 ### Contrubuidores
 
