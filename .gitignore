@@ -3,6 +3,7 @@ MUSGO
 
 # Folders
 /CMakeFiles
+/node_modules
 
 # Files
 /CMakeCache.txt

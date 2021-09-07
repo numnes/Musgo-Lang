@@ -1,4 +1,6 @@
 #include <deque>
+#include <unordered_map>
+#include <list>
 #include "../Types/Production.cpp"
 
 class Syntatic
@@ -9,4 +11,5 @@ public:
 
 private:
   std::deque<Production> productions;
+  void printError(std::string errorToken, std::unordered_map<std::string, std::list<std::string>> dictTerm);
 };
