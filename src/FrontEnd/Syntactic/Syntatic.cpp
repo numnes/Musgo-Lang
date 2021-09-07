@@ -17,6 +17,18 @@ Syntatic::Syntatic(std::deque<Production> _productions)
   this->productions = _productions;
 }
 
+void Syntatic::printError(std::string errorToken, std::unordered_map<std::string, std::list<std::string>> dictTerm)
+{
+  std::cout << "\033[1;31mO token \033[0m" << dictTerm[errorToken].front() << "\033[1;31m não era esperado na linha \033[0m \033[1;35m" << this->productions.front().line << "\n";
+  if (dictTerm[errorToken].empty())
+  {
+    std::cout << "\033[0m\033[1;31mEsperava-se:  \033[0m\033[1;34m \n";
+    for (auto a : dictTerm[errorToken])
+      std::cout << a << " ";
+    std::cout << "\033[0m \n\n";
+  }
+}
+
 void Syntatic::run()
 {
   std::string line;
@@ -43,7 +55,6 @@ void Syntatic::run()
   while (std::getline(myfile, line))
   {
     std::stringstream sline(line);
-
     exFirst = true;
 
     // Não terminal chave
@@ -76,9 +87,7 @@ void Syntatic::run()
     }
 
     for (int i = 0; i < Terminais.size(); i++)
-    {
       derivationList.insert(std::make_pair(Terminais[i], derivations[i]));
-    }
 
     Nterminais.push_back(tableKey);
     Table.insert(std::make_pair(tableKey, derivationList));
@@ -93,18 +102,22 @@ void Syntatic::run()
   this->productions.push_back(p);
   bool error = false;
 
-  std::unordered_map<std::string, std::string> dictTerm = {
-      {"semicolon", ";"},
-      {"colon", ":"},
-      {"bracket_left", "["},
-      {"bracket_right", "]"},
-      {"block_left", "{"},
-      {"block_right", "}"},
-      {"par_left", "("},
-      {"par_right", ")"},
-      {"comma", ","},
-      {"in", "<-"},
-      {"out", "->"}};
+  std::unordered_map<std::string, std::list<std::string>> dictTerm = {
+      {"semicolon", {";"}},
+      {"colon", {":"}},
+      {"bracket_left", {"["}},
+      {"bracket_right", {"]"}},
+      {"block_left", {"{"}},
+      {"block_right", {"}"}},
+      {"par_left", {"("}},
+      {"par_right", {")"}},
+      {"comma", {","}},
+      {"in", {"<-"}},
+      {"out", {"->"}},
+      {"ar_op", {"+", "-", "*", "/"}},
+      {"rel_op", {"<", ">", "<=", ">=", "=="}},
+      {"log_op", {"and", "or", "not", "xor"}},
+  };
 
   while (!Pheap.empty())
   {
@@ -128,10 +141,9 @@ void Syntatic::run()
       }
       else
       {
-        std::cout << "\033[1;31mNão era esperado o token \033[0m" << dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << this->productions.front().line
-                  << "\033[0m\033[1;31m. Esperava-se:  \033[0m\033[1;34m" << dictTerm[X] << "\033[0m \n\n";
+        printError(A, dictTerm);
         error = true;
-        this->productions.pop_front();
+        break;
       }
     }
     else
@@ -140,23 +152,14 @@ void Syntatic::run()
       {
         Pheap.pop_back();
         for (auto rit = Table[X][A].rbegin(); rit != Table[X][A].rend(); rit++)
-        {
           if (*rit != "ϵ")
             Pheap.push_back(*rit);
-        }
       }
       else
       {
-        std::cout << "\033[1;31mNão era esperado o token \033[0m" << dictTerm[A] << "\033[1;31m na linha \033[0m \033[1;35m" << this->productions.front().line
-                  << "\033[0m\033[1;31m. Esperava-se uma das produções a seguir: \033[0m\n";
-
-        for (auto a : Table[X])
-          if (a.second.size() != 0)
-            if (a.first != "$" && a.first != " " && a.first[0] != 13)
-              std::cout << "  \033[1;34m" << ((dictTerm.count(a.first)) ? (dictTerm[a.first]) : (a.first)) << " \033[0m ";
+        printError(A, dictTerm);
         error = true;
-        std::cout << "\n\n";
-        this->productions.pop_front();
+        break;
       }
     }
   }
