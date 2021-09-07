@@ -51,8 +51,8 @@ $# ./MUSGO data/main.mg
           </sub>
         </a>
         <br/>
-        <a href="https://github.com/matheusnunesismael/actions-template-sync/commits?author=matheusnunesismael" title="Documentation">📖</a> 
-        <a href="https://github.com/matheusnunesismael/actions-template-sync/commits?author=matheusnunesismael" title="Code">💻</a>
+        <a href="https://github.com/matheusnunesismael/Musgo-Lang/commits?author=matheusnunesismael" title="Documentation">📖</a> 
+        <a href="https://github.com/matheusnunesismael/Musgo-Lang/commits?author=matheusnunesismael" title="Code">💻</a>
       </td>
       <td align="center">
         <a href="https://github.com/mateusedival">
