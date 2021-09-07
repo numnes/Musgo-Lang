@@ -13,10 +13,10 @@ Os tipos de dados suportados pela linguagem são apresentados na tabela abaixo. 
 
 | Tipo   | Descrição                                            |
 | ------ | ---------------------------------------------------- |
-| `i32 ` | Inteiro de 32 bits                                   |
-| `i64 ` | Inteiro de 64 bits                                   |
-| `f32 ` | Float com 32 bits                                    |
-| `f64 ` | Float com 64 bits                                    |
+| `i32`  | Inteiro de 32 bits                                   |
+| `i64`  | Inteiro de 64 bits                                   |
+| `f32`  | Float com 32 bits                                    |
+| `f64`  | Float com 64 bits                                    |
 | `char` | Representa um caractere, ocupa 1 byte                |
 | `bool` | Tipo lógico, pode assumir true ou false, ocupa 1 bit |
 
@@ -29,9 +29,9 @@ São 23 operadores ao total, 6 operadores relacionais, 4 lógicos, 7 de atribui�
 | `==`                   | Igual              |
 | `!=`                   | Diferente          |
 | `>`                    | Maior que          |
-| `< `                   | Menor que          |
+| `<`                    | Menor que          |
 | `>=`                   | Maior ou igual que |
-| `<= `                  | menor ou igual que |
+| `<=`                   | menor ou igual que |
 
 | Operadores Logicos | Descrição  |
 | ------------------ | ---------- |
