@@ -1,2 +1,0 @@
-/usr/bin/ar qc libFrontEnd.a CMakeFiles/FrontEnd.dir/src/FrontEnd/Lexical/Lexical.cpp.o CMakeFiles/FrontEnd.dir/src/FrontEnd/Syntactic/Syntatic.cpp.o CMakeFiles/FrontEnd.dir/src/FrontEnd/Types/Production.cpp.o CMakeFiles/FrontEnd.dir/src/FrontEnd/Types/Symbol.cpp.o CMakeFiles/FrontEnd.dir/src/FrontEnd/Utils/Utils.cpp.o
-/usr/bin/ranlib libFrontEnd.a

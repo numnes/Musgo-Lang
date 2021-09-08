@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/MUSGO.dir/src/main.cpp.o -o MUSGO  libCompiler.a libAnalyzer.a libFrontEnd.a 
