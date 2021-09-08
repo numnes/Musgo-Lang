@@ -11,5 +11,6 @@ public:
 private:
   SymbolTable symbolTable;
   std::deque<Production> tokenList;
-  int proccessOperation(int i);
+  int proccessAtribuitionExpression(int i);
+  void solveOperation(std::deque<Production> tokenList);
 };

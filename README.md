@@ -37,7 +37,7 @@ $# ./MUSGO data/main.mg
 
 #### 🚧 Mais instruções serão adicionadas futuramente 🚧
 
-### Contrubuidores
+### Contrubuidores 👍
 
 <p align="center">
   <table>
