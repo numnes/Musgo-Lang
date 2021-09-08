@@ -1,0 +1,86 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MUSGO",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Analyzer::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Analyzer-Debug-120bceb1ea262fe464fc.json",
+					"name" : "Analyzer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Compiler::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Compiler-Debug-3df7191c043a19bf8c74.json",
+					"name" : "Compiler",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "FrontEnd::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-FrontEnd-Debug-ee6077d0538d3e36c297.json",
+					"name" : "FrontEnd",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MUSGO::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MUSGO-Debug-a79f61581e583b312dae.json",
+					"name" : "MUSGO",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/nunes/dev/Musgo-Lang/build",
+		"source" : "/home/nunes/dev/Musgo-Lang"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}

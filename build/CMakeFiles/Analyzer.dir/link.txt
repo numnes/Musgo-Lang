@@ -1,0 +1,2 @@
+/usr/bin/ar qc libAnalyzer.a CMakeFiles/Analyzer.dir/src/Analyzer/Analyzer.cpp.o
+/usr/bin/ranlib libAnalyzer.a

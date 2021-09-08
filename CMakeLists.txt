@@ -3,11 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(MUSGO VERSION 1.0.0 LANGUAGES CXX)
 
 # ---------------------- Include guards --------------------------
-#if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
-#  message(FATAL_ERROR
-#    "Please make a new directory (build directory) and run CMake from there."
-#  )
-#endif()
+# TODO: Check if this is necessary
 # ----------------------------------------------------------------
 
 # ----------------------------- Add Musgo Lib ---------------------------
