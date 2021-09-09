@@ -32,6 +32,8 @@ add_library(
   src/FrontEnd/Types/Production.cpp
   src/FrontEnd/Types/Symbol.cpp
   src/FrontEnd/Utils/Utils.cpp
+  src/FrontEnd/Intermediate/AST.h
+  src/FrontEnd/Intermediate/AST.cpp
   ) 
 
 # -----------------------------------------------------------------------------

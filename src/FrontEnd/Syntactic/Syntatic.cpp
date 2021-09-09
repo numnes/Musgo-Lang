@@ -12,6 +12,7 @@
 #include "../Types/Production.cpp"
 #include "Syntatic.h"
 
+
 Syntatic::Syntatic(std::deque<Production> _productions)
 {
   this->productions = _productions;
@@ -29,7 +30,7 @@ void Syntatic::printError(std::string errorToken, std::unordered_map<std::string
   }
 }
 
-void Syntatic::run()
+AST Syntatic::run()
 {
   std::string line;
   std::string line2;
@@ -97,6 +98,10 @@ void Syntatic::run()
 
   Pheap.push_back("$");
   Pheap.push_back("program");
+  AST ast = AST("program");
+
+  std::vector<Node *> nodeStack;
+  nodeStack.push_back(ast.root);
 
   Production p = {"$", " ", -1};
   this->productions.push_back(p);
@@ -136,6 +141,13 @@ void Syntatic::run()
     {
       if (X == A)
       {
+        if (nodeStack.size())
+        {
+          Node *current = nodeStack.back();
+          current->info = this->productions.front().lex;
+
+          nodeStack.pop_back();
+        }
         Pheap.pop_back();
         this->productions.pop_front();
       }
@@ -150,10 +162,20 @@ void Syntatic::run()
     {
       if (!Table[X][A].empty())
       {
+
+        Node *currentNode = nodeStack.back();
+        nodeStack.pop_back();
+
         Pheap.pop_back();
         for (auto rit = Table[X][A].rbegin(); rit != Table[X][A].rend(); rit++)
           if (*rit != "ϵ")
+          {
             Pheap.push_back(*rit);
+            Node *aux = new Node(*rit);
+            currentNode->children.push_back(aux);
+            currentNode->children.back()->parent = currentNode;
+            nodeStack.push_back(aux);
+          }
       }
       else
       {
@@ -163,7 +185,11 @@ void Syntatic::run()
       }
     }
   }
+
+
   if (!error)
     std::cout << "\033[1;32m Nenhum erro encontrado!\033[0m\n";
-  return;
+  return ast;
+
+  
 }

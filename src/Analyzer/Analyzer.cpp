@@ -19,5 +19,7 @@ void Analyzer::run()
 
   Syntatic syntatic(tokens);
 
-  syntatic.run();
+  AST ast = syntatic.run();
+
+  ast.dump();
 }
