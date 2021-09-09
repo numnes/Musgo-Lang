@@ -35,6 +35,14 @@ Para compilar um script em Musgo_lang basta executar o compilador passando como 
 $# ./MUSGO data/main.mg
 ```
 
+### Features implementadas
+
+[x] Análise léxica<br/>
+[x] Análise sintática<br/>
+[ ] Análise semântica<br/>
+[ ] Geração de código intermediário<br/>
+[ ] Geração de executável<br/>
+
 #### 🚧 Mais instruções serão adicionadas futuramente 🚧
 
 ### Contrubuidores

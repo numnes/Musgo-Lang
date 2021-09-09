@@ -6,31 +6,31 @@ constexpr unsigned int str2int(const char *str, int h = 0)
   return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
 }
 
-void SymbolTable::add(std::string name, std::string type)
+void SymbolTable::add(std::string name, std::string type, int size)
 {
   if (!this->contains(name))
   {
-    Symbol symbol = std::make_pair(name, SymbolParams(type, "0"));
+    Symbol symbol = std::make_pair(name, SymbolParams(type, "0", size));
 
     switch (str2int(type.c_str()))
     {
     case str2int("i32"):
-      symbol = std::make_pair(name, SymbolParams(type, "0"));
+      symbol = std::make_pair(name, SymbolParams(type, "0", size));
       break;
     case str2int("i64"):
-      symbol = std::make_pair(name, SymbolParams(type, "0"));
+      symbol = std::make_pair(name, SymbolParams(type, "0", size));
       break;
     case str2int("f32"):
-      symbol = std::make_pair(name, SymbolParams(type, "0.0"));
+      symbol = std::make_pair(name, SymbolParams(type, "0.0", size));
       break;
     case str2int("f64"):
-      symbol = std::make_pair(name, SymbolParams(type, "0.0"));
+      symbol = std::make_pair(name, SymbolParams(type, "0.0", size));
       break;
     case str2int("char"):
-      symbol = std::make_pair(name, SymbolParams(type, "\0"));
+      symbol = std::make_pair(name, SymbolParams(type, "\0", size));
       break;
     case str2int("bool"):
-      symbol = std::make_pair(name, SymbolParams(type, "false"));
+      symbol = std::make_pair(name, SymbolParams(type, "false", size));
       break;
     }
     this->table.insert(symbol);
@@ -67,8 +67,8 @@ SymbolParams SymbolTable::get(std::string name)
   }
   else
   {
-    std::cout << "Error: Symbol " << name << " does not exist in the table." << std::endl;
-    return SymbolParams("", "");
+    std::cout << "Error: A váriável " << name << " Não existe." << std::endl;
+    return SymbolParams("", "", 0);
   }
 }
 

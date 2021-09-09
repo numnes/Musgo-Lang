@@ -112,7 +112,8 @@ void Semantic::solveOperation(std::deque<Production> operation)
     }
   }
   // Remove o fechamento de parenteses da expressão
-  operation.pop_front();
+  if (!operation.empty())
+    operation.pop_front();
 
   // Empilha o resultado da expressão
   operation.push_front(result);
@@ -130,7 +131,7 @@ int Semantic::proccessAtribuitionExpression(int pos)
   Production var = this->tokenList[pos - 2];
   int curretPosition = pos;
 
-  while (this->tokenList[curretPosition].lex != ";")
+  while (this->tokenList[curretPosition].lex != ";" && this->tokenList[curretPosition].lex != "{")
   {
     // TODO: Verificar se o fechamento de parenteses não pertence a um cast
     if (this->tokenList[curretPosition].token == "par_right")
@@ -162,21 +163,151 @@ void Semantic::run()
   std::deque<Production> tokens;
   for (int i = 0; i < this->tokenList.size(); i++)
   {
-    if (this->tokenList[i].token == "type")
+    // É uma declaração de variável
+    if (this->tokenList[i].token == "type" && this->tokenList[i + 1].token == "id")
     {
-      if (i + 1 < this->tokenList.size() && this->tokenList[i + 1].token == "id")
+      // Verifica se a variável já foi declarada
+      if (!this->symbolTable.contains(this->tokenList[i + 1].lex))
       {
-        this->symbolTable.add(this->tokenList[i + 1].lex, this->tokenList[i].lex);
+        this->symbolTable.add(this->tokenList[i + 1].lex, this->tokenList[i].lex, 0);
+        // Se é apenas uma declaração, continua a execução
+        if (i + 2 < this->tokenList.size() && this->tokenList[i + 2].token == ";")
+        {
+          i += 2;
+        }
+        // Se possui uma atribuição na declaração, processa a expressão atribuida
+        else if (i + 2 < this->tokenList.size() && this->tokenList[i + 2].token == "as_op")
+        {
+          i = proccessAtribuitionExpression(i + 3) + 1;
+        }
+        // Sei lá, não vai chegar aqui nunca
+        else
+        {
+          std::cout << "Não era pra ter chegado aqui";
+        }
       }
-      if (i + 2 < this->tokenList.size() && this->tokenList[i + 2].token == ";")
+      // Se foi declarada anteriormente gera um erro
+      else
       {
-        i += 2;
+        std::cout << "Erro semântico: A variável " << this->tokenList[i + 1].lex << " já foi declarada anteriormente. Linha "
+                  << this->tokenList[i + 1].line << std::endl;
+        exit(1);
       }
-      else if (i + 2 < this->tokenList.size() && this->tokenList[i + 2].token == "")
+    }
+    // É uma atribuição
+    if (this->tokenList[i].token == "id")
+    {
+      // Verifica se a variável já foi declarada
+      if (this->symbolTable.contains(this->tokenList[i].lex))
       {
-        // PLACEHOLDER
-        i += 2;
+        if (i + 1 < this->tokenList.size() && this->tokenList[i + 1].token == "as_op")
+        {
+          if (this->tokenList[i + 1].lex == "++" || this->tokenList[i + 1].lex == "--")
+          {
+            if (this->symbolTable.get(this->tokenList[i].lex).type == "i32" || this->symbolTable.get(this->tokenList[i].lex).type == "i64")
+            {
+              i += 1;
+            }
+            else
+            {
+              std::cout << "Erro semântico: O tipo da variável " << this->tokenList[i].lex << " não e compativel com operações de incremento unárias (++ ou --). Linha "
+                        << this->tokenList[i].line << std::endl;
+              exit(1);
+            }
+          }
+          else
+          {
+            i = proccessAtribuitionExpression(i + 2);
+          }
+        }
+        else
+        {
+          std::cout << "Não era pra ter chegado aqui 2";
+        }
       }
+      else
+      {
+        std::cout << "Erro semântico: A variável " << this->tokenList[i].lex << " não foi declarada. Linha "
+                  << this->tokenList[i].line << std::endl;
+        exit(1);
+      }
+    }
+    // É um foreach
+    else if (this->tokenList[i].lex == "foreach")
+    {
+      if (this->symbolTable.contains(this->tokenList[i + 3].lex))
+      {
+        if (this->symbolTable.get(this->tokenList[i + 3].lex).size > 0)
+        {
+          if (!this->symbolTable.contains(this->tokenList[i + 1].lex))
+          {
+            this->symbolTable.add(this->tokenList[i + 1].lex, this->symbolTable.get(this->tokenList[i + 3].lex).type, 0);
+            i += 3;
+          }
+          else
+          {
+            std::cout << "Erro semântico: A variável " << this->tokenList[i + 1].lex << " já foi declarada anteriormente. Linha "
+                      << this->tokenList[i + 1].line << std::endl;
+            exit(1);
+          }
+        }
+        else
+        {
+          std::cout << "Erro semântico: A variável " << this->tokenList[i + 3].lex << " não é um array. Linha "
+                    << this->tokenList[i + 3].line << std::endl;
+          exit(1);
+        }
+      }
+      else
+      {
+        std::cout << "Erro semântico: A variável " << this->tokenList[i + 3].lex << " não foi declarada. Linha "
+                  << this->tokenList[i + 3].line << std::endl;
+        exit(1);
+      }
+    }
+    // É um for
+    else if (this->tokenList[i].lex == "for")
+    {
+      if (this->tokenList[i + 1].token == "colon")
+      {
+        i += 1;
+      }
+      else
+      {
+        if (this->symbolTable.contains(this->tokenList[i + 1].lex))
+        {
+          i = proccessAtribuitionExpression(i + 2) + 1;
+        }
+        else
+        {
+          std::cout << "Erro semântico: A variável " << this->tokenList[i + 1].lex << " não foi declarada. Linha "
+                    << this->tokenList[i + 1].line << std::endl;
+          exit(1);
+        }
+      }
+      if (this->tokenList[i + 1].token == "colon")
+      {
+        i += 1;
+      }
+      else
+      {
+        i = proccessAtribuitionExpression(i + 2) + 1;
+      }
+      if (!this->symbolTable.contains(this->tokenList[i].lex))
+      {
+        std::cout << "Erro semântico: A variável " << this->tokenList[i + 1].lex << " não foi declarada. Linha "
+                  << this->tokenList[i + 1].line << std::endl;
+        exit(1);
+      }
+      else
+      {
+        i = proccessAtribuitionExpression(i + 2);
+      }
+    }
+    // É um if
+    else if (this->tokenList[i].lex == "if")
+    {
+      i = proccessAtribuitionExpression(i + 1);
     }
   }
 }
