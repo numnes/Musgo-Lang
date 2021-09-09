@@ -37,11 +37,11 @@ $# ./MUSGO data/main.mg
 
 ### Features implementadas
 
-[x] Análise léxica<br/>
-[x] Análise sintática<br/>
-[ ] Análise semântica<br/>
-[ ] Geração de código intermediário<br/>
-[ ] Geração de executável<br/>
+- [x] Análise léxica<br/>
+- [x] Análise sintática<br/>
+- [ ] Análise semântica<br/>
+- [ ] Geração de código intermediário<br/>
+- [ ] Geração de executável<br/>
 
 #### 🚧 Mais instruções serão adicionadas futuramente 🚧
 
