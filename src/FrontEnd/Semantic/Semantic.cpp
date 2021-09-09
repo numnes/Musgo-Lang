@@ -1,4 +1,5 @@
 #include <deque>
+#include <set>
 #include "Semantic.h"
 #include "SymbolTable.h"
 #include "../Types/Production.cpp"
@@ -22,12 +23,15 @@ void Semantic::solveOperation(std::deque<Production> operation)
   Production result = Production();
   // Pega o primeiro token da lista
   Production currentToken = operation.front();
+  result = currentToken;
   // Remove o primeiro token da lista
   operation.pop_front();
 
+  // Operadores logicos unários
+  std::set<std::string> unLogOp = {"!", "not"};
+
   // Guarda o tipo do token na posição corrente
   std::string currentType;
-
   // Se o token corrente for uma variável busca seu tipo na tabela de simbolos
   if (currentToken.token == "id")
   {
@@ -43,6 +47,45 @@ void Semantic::solveOperation(std::deque<Production> operation)
       exit(1);
     }
   }
+  else if (currentToken.lex == "++" || currentToken.lex == "--")
+  {
+    if (operation.front().token == "id")
+    {
+      if (this->symbolTable.contains(operation.front().lex))
+      {
+        SymbolParams varUn = this->symbolTable.get(operation.front().lex);
+        if (varUn.type == "i32" || varUn.type == "i64")
+        {
+          operation.pop_front();
+        }
+        else
+        {
+          std::cout << "Erro semântico: A operação unária não é compativel com o tipo da variável " << operation.front().lex << ". Linha "
+                    << operation.front().line << std::endl;
+          exit(1);
+        }
+      }
+      else
+      {
+        std::cout << "Erro semântico: Variável " << operation.front().lex << " não declarada. Linha "
+                  << operation.front().line << std::endl;
+        exit(1);
+      }
+    }
+    else
+    {
+      if (operation.front().token == "num")
+      {
+        operation.pop_front();
+      }
+      else
+      {
+        std::cout << "Erro semântico: A operação unária não é compativel com o valor " << operation.front().lex << ". Linha "
+                  << operation.front().line << std::endl;
+        exit(1);
+      }
+    }
+  }
   // Se o token não for uma variável então ela é um valor, assim é possível
   // Considerar apenas seu pseudo-tipo (num,float)
   else
@@ -50,19 +93,70 @@ void Semantic::solveOperation(std::deque<Production> operation)
     currentType = currentToken.lex;
   }
 
+  // Processamento da expressão
   // Itera até chegar ao fim da expressão
   while (!operation.empty() && operation.front().token != "par_left")
   {
     if (operation.front().token == "op")
     {
-      // Se o token for um operador retira ele da expressão
+      // Pega o operador
+      Production currentOperator = operation.front();
+      // Retira o operador da expressão
       operation.pop_front();
       // Pega o próximo operando
       Production nextToken = operation.front();
       // Guarda o tipo do proximo operando
       std::string nextType;
       // Remove o próximo operando da expressão
-      operation.pop_front();
+
+      std::string forcedType = "";
+
+      if (unLogOp.find(currentOperator.token) != unLogOp.end())
+      {
+        if (currentToken.token == "id")
+        {
+          if (this->symbolTable.contains(currentToken.lex))
+          {
+            if (this->symbolTable.get(currentToken.lex).type == "bool")
+            {
+              currentType = "bool";
+              continue;
+            }
+            else
+            {
+              std::cout << "Erro semântico: A operação unária não é compativel com o tipo da variável " << currentToken.lex << ". Linha "
+                        << currentToken.line << std::endl;
+              exit(1);
+            }
+          }
+          else
+          {
+            std::cout << "Erro semântico: Variável " << operation.front().lex << " não declarada. Linha "
+                      << operation.front().line << std::endl;
+            exit(1);
+          }
+        }
+        else if (currentToken.token == "bool")
+        {
+          currentType = "bool";
+          continue;
+        }
+        else
+        {
+          std::cout << "Erro semântico: A operação logica não é compativel com o valor " << currentToken.lex << ". Linha "
+                    << currentToken.line << std::endl;
+          exit(1);
+        }
+      }
+      else
+      {
+        operation.pop_front();
+      }
+
+      if (currentOperator.token == "rel_op" || currentOperator.token == "rel_op")
+      {
+        forcedType = "bool";
+      }
 
       // Se o próximo operando for uma variável busca seu tipo na tabela de simbolos
       if (nextToken.token == "id")
@@ -83,7 +177,6 @@ void Semantic::solveOperation(std::deque<Production> operation)
       {
         nextType = nextToken.lex;
       }
-
       // Guarda o resultado da operação
       result.line = currentToken.line;
       result.token = "result";
@@ -107,10 +200,15 @@ void Semantic::solveOperation(std::deque<Production> operation)
           exit(1);
         }
       }
+      if (forcedType != "")
+      {
+        nextType = forcedType;
+      }
       currentToken = result;
       currentType = result.lex;
     }
   }
+
   // Remove o fechamento de parenteses da expressão
   if (!operation.empty())
     operation.pop_front();
@@ -145,6 +243,7 @@ int Semantic::proccessAtribuitionExpression(int pos)
     curretPosition++;
   }
   solveOperation(operation);
+
   if (var.lex == operation.front().lex)
   {
     return curretPosition;
@@ -178,7 +277,7 @@ void Semantic::run()
         // Se possui uma atribuição na declaração, processa a expressão atribuida
         else if (i + 2 < this->tokenList.size() && this->tokenList[i + 2].token == "as_op")
         {
-          i = proccessAtribuitionExpression(i + 3) + 1;
+          i = proccessAtribuitionExpression(i + 3);
         }
         // Sei lá, não vai chegar aqui nunca
         else
@@ -268,6 +367,7 @@ void Semantic::run()
     // É um for
     else if (this->tokenList[i].lex == "for")
     {
+      // Processa a primeira parte do for, atribuição
       if (this->tokenList[i + 1].token == "colon")
       {
         i += 1;
@@ -276,7 +376,7 @@ void Semantic::run()
       {
         if (this->symbolTable.contains(this->tokenList[i + 1].lex))
         {
-          i = proccessAtribuitionExpression(i + 2) + 1;
+          i = proccessAtribuitionExpression(i + 2);
         }
         else
         {
@@ -285,14 +385,16 @@ void Semantic::run()
           exit(1);
         }
       }
+      // Processa a segunda parte do for, expressão
       if (this->tokenList[i + 1].token == "colon")
       {
         i += 1;
       }
       else
       {
-        i = proccessAtribuitionExpression(i + 2) + 1;
+        i = proccessAtribuitionExpression(i + 2);
       }
+      // Processa a terceira parte do for, incremento
       if (!this->symbolTable.contains(this->tokenList[i].lex))
       {
         std::cout << "Erro semântico: A variável " << this->tokenList[i + 1].lex << " não foi declarada. Linha "
