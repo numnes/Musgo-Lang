@@ -2,6 +2,7 @@
 #include <vector>
 #include <deque>
 #include "../Types/Production.cpp"
+#include <set>
 
 struct Node {
     std::string name;
@@ -16,4 +17,8 @@ class AST {
 public:
     AST(std::string yes);
     Node* root;
+public:
+    void dump();
 };
+
+std::string graph_iter(Node* root, std::string &s, std::set<int> pool);

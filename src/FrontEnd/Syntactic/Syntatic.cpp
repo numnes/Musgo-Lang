@@ -11,19 +11,11 @@
 #include "../Utils/Utils.cpp"
 #include "../Types/Production.cpp"
 #include "Syntatic.h"
-#include "../Intermediate/AST.h"
+
 
 Syntatic::Syntatic(std::deque<Production> _productions)
 {
   this->productions = _productions;
-}
-
-void printAST(Node *root)
-{
-  std::cout << root->name << " " << root->info << "\n";
-
-  for (auto x : root->children)
-    printAST(x);
 }
 
 void Syntatic::printError(std::string errorToken, std::unordered_map<std::string, std::list<std::string>> dictTerm)
@@ -38,7 +30,7 @@ void Syntatic::printError(std::string errorToken, std::unordered_map<std::string
   }
 }
 
-void Syntatic::run()
+AST Syntatic::run()
 {
   std::string line;
   std::string line2;
@@ -194,11 +186,10 @@ void Syntatic::run()
     }
   }
 
-  printAST(ast.root);
 
   if (!error)
     std::cout << "\033[1;32m Nenhum erro encontrado!\033[0m\n";
-  return;
+  return ast;
 
   
 }

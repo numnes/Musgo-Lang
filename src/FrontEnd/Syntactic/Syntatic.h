@@ -2,12 +2,13 @@
 #include <unordered_map>
 #include <list>
 #include "../Types/Production.cpp"
+#include "../Intermediate/AST.h"
 
 class Syntatic
 {
 public:
   Syntatic(std::deque<Production> _productions);
-  void run();
+  AST run();
 
 private:
   std::deque<Production> productions;

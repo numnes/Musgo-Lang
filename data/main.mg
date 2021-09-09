@@ -6,7 +6,7 @@ f64 f = 3.4445;
 // foreach
 foreach x: vetor {
 	if x < menor {
-		menor = x
+		menor = x;
 	}
 }
 
