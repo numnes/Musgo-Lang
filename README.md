@@ -43,7 +43,7 @@ $# ./MUSGO data/main.mg
 - [ ] Geração de código intermediário<br/>
 - [ ] Geração de executável<br/>
 
-#### 🚧 Mais instruções serão adicionadas futuramente 🚧
+#### 🚧 Mais informaçõs serão adicionadas futuramente 🚧
 
 ### Contrubuidores
 
