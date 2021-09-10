@@ -22,6 +22,8 @@ void AST::dump()
 
     graph_iter(this->root, s, pool);
 
+    s = "digraph G {\n" + s + "}";
+
     std::ofstream file;
     file.open("dump.txt");
 
@@ -40,10 +42,10 @@ std::string graph_iter(Node *root, std::string &s, std::set<int> pool)
     if (!root->children.size() and root->info == "")
         return "";
 
-    // if(root->children.size() == 1) {
-    //     std::string name = graph_iter(root->children[0],s,pool);
-    //     return name;
-    // }
+    if((root->children.size() == 1) and (root->children[0]->info == "")) {
+        std::string name = graph_iter(root->children[0],s,pool);
+        return name;
+    }
 
     int rng = rand();
     while (pool.count(rng))
@@ -53,9 +55,12 @@ std::string graph_iter(Node *root, std::string &s, std::set<int> pool)
     pool.insert(rng);
 
     std::string name = "\"" + root->name + std::to_string(rng) + "\" ";
-    s += name + " " + " [label=\"";
+    s += name + " " + " [label=";
 
-    s += root->info != "" ? root->info + "\"]\n" : root->name + "\"]\n";
+    if(root->name == "string")
+        s += root->info != "" ? root->info + "]\n" : root->name + "]\n";
+    else 
+        s += root->info != "" ? "\"" + root->info + "\"]\n" : "\"" + root->name + "\"]\n";
 
     for (auto it = root->children.rbegin(); it != root->children.rend(); it++)
     {
