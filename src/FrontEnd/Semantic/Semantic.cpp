@@ -95,7 +95,7 @@ std::deque<Production> Semantic::solveOperation(std::deque<Production> operation
   //std::cout << "DEBUG: Token corrente token: " << currentToken.token << std::endl;
   //std::cout << "DEBUG: Token corrente lex: " << currentToken.lex << std::endl;
   //std::cout << "DEBUG: Tamanho da pilha " << operation.size() << std::endl;
-
+  //std::cout << "TÀ AQUI" << std::endl;
   // Processamento da expressão
   // Itera até chegar ao fim da expressão
   while (!operation.empty() && operation.front().token != "par_left")
@@ -105,8 +105,13 @@ std::deque<Production> Semantic::solveOperation(std::deque<Production> operation
 
     if (operation.front().token.find("_op"))
     {
+      // std::cout << "\n\nPROXIMO TOKEN " << currentToken.lex << std::endl;
+      // std::cout << "PROXIMO TOKEN line " << currentToken.line << std::endl;
+      // std::cout << "Tamanho da exp " << operation.size() << std::endl;
+
       // Pega o operador
       Production currentOperator = operation.front();
+      //std::cout << "Operador " << currentOperator.lex << std::endl;
       // Retira o operador da expressão
       operation.pop_front();
       // Pega o próximo operando
@@ -158,17 +163,23 @@ std::deque<Production> Semantic::solveOperation(std::deque<Production> operation
       }
       else if (currentOperator.token == "type")
       {
+        std::cout << "ENTROU AQUI" << std::endl;
         if (currentToken.token == "id")
         {
+          std::cout << "variável " << currentToken.lex << std::endl;
           if (this->symbolTable.contains(currentToken.lex))
           {
             this->symbolTable.update(currentToken.lex, currentOperator.lex);
+            std::cout << "PASSOU" << std::endl;
           }
         }
         else
         {
           currentToken.token = currentOperator.lex;
         }
+        nextType = currentOperator.lex;
+        std::cout << "SAIU PARA PROXIMA" << std::endl;
+        continue;
       }
       else
       {
@@ -200,21 +211,21 @@ std::deque<Production> Semantic::solveOperation(std::deque<Production> operation
         nextType = nextToken.token;
       }
       // Guarda o resultado da operação
-
       result.line = currentToken.line;
       // Trata a iteração entre os operandos
       if (nextType == currentType)
         result = currentToken;
       else
       {
+        std::string finalType;
         if ((currentType == "i32" && nextType == "num") || (currentType == "num" && nextType == "i32"))
-          result.lex = "i32";
+          finalType = "i32";
         else if ((currentType == "i64" && nextType == "num") || (currentType == "num" && nextType == "i64"))
-          result.lex = "i64";
+          finalType = "i64";
         else if ((currentType == "f32" && nextType == "float") || (currentType == "float" && nextType == "f32"))
-          result.lex = "f32";
+          finalType = "f32";
         else if ((currentType == "f64" && nextType == "float") || (currentType == "float" && nextType == "f64"))
-          result.lex = "f64";
+          finalType = "f64";
         else
         {
           std::cout << "Erro semântico: Operação não é compativel com os tipos " << currentType << " e " << nextType << ". Linha "
@@ -223,6 +234,8 @@ std::deque<Production> Semantic::solveOperation(std::deque<Production> operation
           //           << currentToken.line << std::endl;
           exit(1);
         }
+        if (currentToken.token != "id")
+          result.lex = finalType;
       }
       if (forcedType != "")
       {
@@ -239,6 +252,7 @@ std::deque<Production> Semantic::solveOperation(std::deque<Production> operation
 
   // Empilha o resultado da expressão
   operation.push_front(result);
+  //std::cout << "CHEGOU NO FIM" << std::endl;
   return operation;
 }
 
@@ -277,17 +291,18 @@ int Semantic::proccessAtribuitionExpression(int pos, Production var)
   //std::cout << "DEBUG: começo da expressão " << this->tokenList[currentPosition].lex << std::endl;
   while (this->tokenList[currentPosition].lex != ";" && this->tokenList[currentPosition].lex != "{" && this->tokenList[currentPosition].lex != "," && this->tokenList[currentPosition].lex != "}")
   {
-    //std::cout << "DEBUG: Passou aqui, token corrente: " << this->tokenList[currentPosition].lex << std::endl;
+    //std::cout << "DEBUG: Passou aqui token corrente: " << this->tokenList[currentPosition].lex << std::endl;
     //std::cout << "DEBUG: Tamanho da expressão: " << operation.size() << std::endl;
-    // TODO: Verificar se o fechamento de parenteses não pertence a um cast
     if (this->tokenList[currentPosition].token == "par_right")
     {
       if (this->tokenList[currentPosition - 1].token == "type")
       {
+        std::cout << "É UM CAST" << std::endl;
         Production typeCast = this->tokenList[currentPosition - 1];
         operation.pop_front();
         operation.pop_front();
         operation.push_front(typeCast);
+        currentPosition++;
       }
       else
       {
@@ -317,9 +332,10 @@ int Semantic::proccessAtribuitionExpression(int pos, Production var)
       }
     }
   }
-  //std::cout << "DEPUG: Fim da expressão " << operation.size() << std::endl;
+  //std::cout << "DEPUG: Fim da expressão " << operation.size() << "\n\n";
   operation = solveOperation(operation);
-  //std::cout << "DEPUG " << operation.front().lex << std::endl;
+  // std::cout << "DEPUG operation front " << operation.front().lex << std::endl;
+  // std::cout << "DEPUG operation size  " << operation.size() << std::endl;
 
   std::string resultType = operation.front().token;
 
@@ -365,7 +381,7 @@ int Semantic::proccessExpression(int pos)
     // TODO: Verificar se o fechamento de parenteses não pertence a um cast
     if (this->tokenList[currentPosition].token == "par_right")
     {
-      solveOperation(operation);
+      operation = solveOperation(operation);
     }
     else
     {
@@ -396,6 +412,9 @@ int Semantic::proccessExpression(int pos)
 
 void Semantic::run()
 {
+  this->symbolTable.add("true", "bool", 0);
+  this->symbolTable.add("false", "bool", 0);
+
   bool error = false;
   std::deque<Production> tokens;
   for (int i = 0; i < this->tokenList.size(); i++)

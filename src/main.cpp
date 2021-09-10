@@ -9,7 +9,16 @@ int main(int argc, char *argv[])
         std::cerr << "Error, no input file\n";
         return 0;
     }
-
-    Compiler compiler(argv[1]);
-    compiler.run();
+    if (argc > 2)
+    {
+        Compiler compiler(argv[1], argv[2]);
+        std::cout << argv[2] << std::endl;
+        compiler.run();
+    }
+    else
+    {
+        char flag[5] = "null";
+        Compiler compiler(argv[1], flag);
+        compiler.run();
+    }
 }

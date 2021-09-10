@@ -6,6 +6,12 @@ SymbolTable::SymbolTable()
   this->table = std::unordered_map<std::string, SymbolParams>();
 }
 
+/** 
+ * @param str *char - Vetor de caracteres
+ * @param type std::string - Novo tipo da variável
+ * @return int
+ * @brief Converte um vetor de caracteres em um inteiro
+*/
 constexpr unsigned int str2int(const char *str, int h = 0)
 {
   return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
@@ -53,11 +59,22 @@ void SymbolTable::add(std::string name, std::string type, int size)
   }
 }
 
+/** 
+ * @param name std::string - Nome da variável
+ * @return bool
+ * @brief Verifica se a variável existe
+*/
 bool SymbolTable::contains(std::string name)
 {
   return this->table.find(name) != this->table.end();
 }
 
+/** 
+ * @param name std::string - Nome da variável
+ * @param type std::string - Novo tipo da variável
+ * @return void
+ * @brief Modifica o tipo da variável na tabela de simbolos
+*/
 void SymbolTable::update(std::string name, std::string type)
 {
   if (this->contains(name))
@@ -66,10 +83,15 @@ void SymbolTable::update(std::string name, std::string type)
   }
   else
   {
-    std::cout << "Error: Symbol " << name << " does not exist in the table." << std::endl;
+    std::cout << "ERRO SEMÂNTICO: Não é possivel alterar o tipo da variável " << name << ", não existe declaração prévia." << std::endl;
   }
 }
 
+/** 
+ * @param name std::string - Nome da variável
+ * @return SymbolParams
+ * @brief Retorna os parametros da variável, se ela existe
+*/
 SymbolParams SymbolTable::get(std::string name)
 {
   if (this->contains(name))
@@ -78,11 +100,15 @@ SymbolParams SymbolTable::get(std::string name)
   }
   else
   {
-    std::cout << "Error: A váriável " << name << " não foi declarada." << std::endl;
+    std::cout << "ERRO SEMÂNTICO: A váriável " << name << " não foi declarada." << std::endl;
     exit(1);
   }
 }
 
+/** 
+ * @return void
+ * @brief Printa a tabela de simbolos
+*/
 void SymbolTable::print()
 {
   for (auto &symbol : this->table)
