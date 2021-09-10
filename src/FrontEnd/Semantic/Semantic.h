@@ -15,5 +15,5 @@ private:
   int proccessAtribuitionExpression(int pos, Production var);
   int proccessLogicExpression(int pos);
   int proccessExpression(int pos);
-  void solveOperation(std::deque<Production> tokenList);
+  std::deque<Production> solveOperation(std::deque<Production> tokenList);
 };

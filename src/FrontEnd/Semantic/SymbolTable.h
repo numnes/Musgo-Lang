@@ -11,7 +11,7 @@ class SymbolTable
 public:
   SymbolTable();
   void add(std::string name, std::string type, int size);
-  void update(std::string name, std::string type, std::string value);
+  void update(std::string name, std::string type);
   SymbolParams get(std::string name);
   bool contains(std::string name);
   void print();

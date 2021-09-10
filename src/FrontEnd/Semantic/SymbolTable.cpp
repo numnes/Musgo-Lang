@@ -58,12 +58,11 @@ bool SymbolTable::contains(std::string name)
   return this->table.find(name) != this->table.end();
 }
 
-void SymbolTable::update(std::string name, std::string type, std::string value)
+void SymbolTable::update(std::string name, std::string type)
 {
   if (this->contains(name))
   {
     this->table.find(name)->second.type = type;
-    this->table.find(name)->second.value = value;
   }
   else
   {

@@ -12,7 +12,6 @@
 #include "../Types/Production.cpp"
 #include "Syntatic.h"
 
-
 Syntatic::Syntatic(std::deque<Production> _productions)
 {
   this->productions = _productions;
@@ -20,14 +19,18 @@ Syntatic::Syntatic(std::deque<Production> _productions)
 
 void Syntatic::printError(std::string errorToken, std::unordered_map<std::string, std::list<std::string>> dictTerm)
 {
-  std::cout << "\033[1;31mO token \033[0m" << dictTerm[errorToken].front() << "\033[1;31m não era esperado na linha \033[0m \033[1;35m" << this->productions.front().line << "\n";
-  if (dictTerm[errorToken].empty())
+  std::string tokenError = errorToken;
+  if (dictTerm[errorToken].size() > 0)
+    tokenError = dictTerm[errorToken].front();
+  std::cout << "\033[1;31mO token \033[0m" << tokenError << "\033[1;31m não era esperado na linha \033[0m \033[1;35m" << this->productions.front().line << "\n";
+  if (dictTerm[errorToken].size() > 0)
   {
     std::cout << "\033[0m\033[1;31mEsperava-se:  \033[0m\033[1;34m \n";
     for (auto a : dictTerm[errorToken])
       std::cout << a << " ";
     std::cout << "\033[0m \n\n";
   }
+  exit(1);
 }
 
 AST Syntatic::run()
@@ -126,6 +129,7 @@ AST Syntatic::run()
 
   while (!Pheap.empty())
   {
+
     // std::cout << "================================== heap\n";
     // for( auto a: Pheap)
     //     std::cout << "[" << a << "] ";
@@ -134,8 +138,11 @@ AST Syntatic::run()
     // for( auto a: productions)
     //     std::cout << "[" << a.token << "] ";
     // std::cout << "\n\n";
+    //
     std::string X = Pheap.back();
     std::string A = this->productions.front().token;
+    // std::cout << "TESTE " << A << std::endl;
+    // std::cout << "TESTE " << this->productions.front().lex << std::endl;
 
     if (std::find(Terminais.begin(), Terminais.end(), X) != Terminais.end())
     {
@@ -186,10 +193,7 @@ AST Syntatic::run()
     }
   }
 
-
   if (!error)
-    std::cout << "\033[1;32m Nenhum erro encontrado!\033[0m\n";
+    std::cout << "\033[1;32m Nenhum erro sintatico encontrado!\033[0m\n";
   return ast;
-
-  
 }

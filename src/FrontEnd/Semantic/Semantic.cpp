@@ -17,7 +17,7 @@ Semantic::Semantic(std::deque<Production> _tokenList)
  * @throws SemanticError
  * @brief Verificar se a operação aritimetica é válida
 */
-void Semantic::solveOperation(std::deque<Production> operation)
+std::deque<Production> Semantic::solveOperation(std::deque<Production> operation)
 {
   // Variável que armazena o resultado da operacao
   Production result = Production();
@@ -57,7 +57,10 @@ void Semantic::solveOperation(std::deque<Production> operation)
         SymbolParams varUn = this->symbolTable.get(operation.front().lex);
         if (varUn.type == "i32" || varUn.type == "i64")
         {
-          operation.pop_front();
+          //std::cout << "DEPUG " << operation.front().lex << std::endl;
+
+          //std::cout << "DEPUG: " << varUn.type << std::endl;
+          return operation;
         }
         else
         {
@@ -75,16 +78,9 @@ void Semantic::solveOperation(std::deque<Production> operation)
     }
     else
     {
-      if (operation.front().token == "num")
-      {
-        operation.pop_front();
-      }
-      else
-      {
-        std::cout << "Erro semântico: A operação unária não é compativel com o valor " << operation.front().lex << ". Linha "
-                  << operation.front().line << std::endl;
-        exit(1);
-      }
+      std::cout << "Erro semântico: A operação unária " << currentToken.lex << " não pode ser aplicada a valores. Linha "
+                << operation.front().line << std::endl;
+      exit(1);
     }
   }
   // Se o token não for uma variável então ela é um valor, assim é possível
@@ -104,7 +100,7 @@ void Semantic::solveOperation(std::deque<Production> operation)
   // Itera até chegar ao fim da expressão
   while (!operation.empty() && operation.front().token != "par_left")
   {
-    //std::cout << "\nDEBUG: Token corrente " << currentToken.lex << std::endl;
+    //std::cout << "\nDEBUG: Token corrente " << currentToken.lex << " " << currentToken.line << std::endl;
     //std::cout << "DEBUG: Topo da pilha " << operation.front().lex << std::endl;
 
     if (operation.front().token.find("_op"))
@@ -160,6 +156,20 @@ void Semantic::solveOperation(std::deque<Production> operation)
           exit(1);
         }
       }
+      else if (currentOperator.token == "type")
+      {
+        if (currentToken.token == "id")
+        {
+          if (this->symbolTable.contains(currentToken.lex))
+          {
+            this->symbolTable.update(currentToken.lex, currentOperator.lex);
+          }
+        }
+        else
+        {
+          currentToken.token = currentOperator.lex;
+        }
+      }
       else
       {
         operation.pop_front();
@@ -209,8 +219,8 @@ void Semantic::solveOperation(std::deque<Production> operation)
         {
           std::cout << "Erro semântico: Operação não é compativel com os tipos " << currentType << " e " << nextType << ". Linha "
                     << currentToken.line << std::endl;
-          std::cout << "Erro semântico: Operação não é compativel com os tipos " << currentToken.lex << " e " << nextToken.lex << ". Linha "
-                    << currentToken.line << std::endl;
+          // std::cout << "Erro semântico: Operação não é compativel com os tipos " << currentToken.lex << " e " << nextToken.lex << ". Linha "
+          //           << currentToken.line << std::endl;
           exit(1);
         }
       }
@@ -229,6 +239,7 @@ void Semantic::solveOperation(std::deque<Production> operation)
 
   // Empilha o resultado da expressão
   operation.push_front(result);
+  return operation;
 }
 
 /** 
@@ -271,14 +282,24 @@ int Semantic::proccessAtribuitionExpression(int pos, Production var)
     // TODO: Verificar se o fechamento de parenteses não pertence a um cast
     if (this->tokenList[currentPosition].token == "par_right")
     {
-      solveOperation(operation);
+      if (this->tokenList[currentPosition - 1].token == "type")
+      {
+        Production typeCast = this->tokenList[currentPosition - 1];
+        operation.pop_front();
+        operation.pop_front();
+        operation.push_front(typeCast);
+      }
+      else
+      {
+        operation = solveOperation(operation);
+      }
     }
     else
     {
       if (this->tokenList[currentPosition].token == "bracket_left")
       {
         //std::cout << "DEBUG: posição vetor" << this->tokenList[currentPosition + 1].lex << std::endl;
-        if (this->tokenList[currentPosition - 1].token != "id" && varParams.size <= std::stoi(this->tokenList[currentPosition + 1].lex))
+        if (this->tokenList[currentPosition + 1].token != "id" && varParams.size <= std::stoi(this->tokenList[currentPosition + 1].lex))
         {
           std::cout << "Erro semântico: A posição acessada está fora dos limites do vetor. Linha "
                     << this->tokenList[currentPosition].line << std::endl;
@@ -296,8 +317,9 @@ int Semantic::proccessAtribuitionExpression(int pos, Production var)
       }
     }
   }
-  //std::cout << "DEBUG: Fim da expressão " << operation.size() << std::endl;
-  solveOperation(operation);
+  //std::cout << "DEPUG: Fim da expressão " << operation.size() << std::endl;
+  operation = solveOperation(operation);
+  //std::cout << "DEPUG " << operation.front().lex << std::endl;
 
   std::string resultType = operation.front().token;
 
@@ -350,7 +372,7 @@ int Semantic::proccessExpression(int pos)
       if (this->tokenList[currentPosition].token == "bracket_left")
       {
         SymbolParams varParams = this->symbolTable.get(this->tokenList[currentPosition - 1].lex);
-        if (this->tokenList[currentPosition - 1].token != "id" && varParams.size <= std::stoi(this->tokenList[currentPosition + 1].lex))
+        if (this->tokenList[currentPosition + 1].token != "id" && varParams.size <= std::stoi(this->tokenList[currentPosition + 1].lex))
         {
           std::cout << "Erro semântico: A posição acessada está fora dos limites do vetor. Linha "
                     << this->tokenList[currentPosition].line << std::endl;
@@ -378,7 +400,12 @@ void Semantic::run()
   std::deque<Production> tokens;
   for (int i = 0; i < this->tokenList.size(); i++)
   {
-    //std::cout << "\n\nDEBUG: Linha: " << this->tokenList[i].line << std::endl << std::endl;
+    // std::cout << "DEPUG: CHEGOU DE NOVO" << std::endl;
+    // std::cout << "DEBPUG: Linha: " << this->tokenList[i].line << std::endl;
+    // std::cout << "DEBPUG: Tamanho: " << this->tokenList.size() << std::endl;
+    // std::cout << "DEBPUG: i: " << i << std::endl;
+    // std::cout << "DEBPUG: token: " << this->tokenList[i].lex << std::endl
+    //           << std::endl;
     // É uma declaração de variável
     if (this->tokenList[i].token == "type" && this->tokenList[i + 1].token == "id")
     {
@@ -552,5 +579,8 @@ void Semantic::run()
     {
       i = proccessExpression(i + 1);
     }
+    //std::cout << "DEPUG Tá no fim" << std::endl;
+    //std::cout << "DEBPUG: i: " << i << std::endl;
   }
+  std::cout << "\033[1;32m Nenhum erro semantico encontrado!\033[0m\n";
 }

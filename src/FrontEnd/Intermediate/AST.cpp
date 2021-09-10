@@ -32,6 +32,7 @@ void AST::dump()
 
     file << s;
     file.close();
+    std::cout << "\033[1;32m Codigo intermediário gerado no arquivo dump.txt\033[0m\n";
 }
 
 std::string graph_iter(Node *root, std::string &s, std::set<int> pool)

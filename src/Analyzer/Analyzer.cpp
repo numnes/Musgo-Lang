@@ -20,7 +20,8 @@ void Analyzer::run()
 
   Syntatic syntatic(tokens);
   Semantic semantic(tokens);
-  semantic.run();
   AST ast = syntatic.run();
+  semantic.run();
+
   ast.dump();
 }
