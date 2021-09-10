@@ -10,10 +10,11 @@ foreach x: vetor {
 	}
 }
 x++;
+menor = 3;
 
 //classic for
 i32 i;
-for  i = 0; i < 4; i++ {
+for i = 0; i < 4; i++ {
 	if vetor[i] < menor {
 		menor = x;
 	}

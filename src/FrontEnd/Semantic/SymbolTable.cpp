@@ -1,39 +1,51 @@
 #include "SymbolTable.h"
 #include "../Types/Symbol.cpp"
 
+SymbolTable::SymbolTable()
+{
+  this->table = std::unordered_map<std::string, SymbolParams>();
+}
+
 constexpr unsigned int str2int(const char *str, int h = 0)
 {
   return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
 }
 
+/** 
+ * @param name string - Nome da variável
+ * @param type string - Tipo da variável
+ * @param size int - Tamanho da variável
+ * @return int
+ * @throws SemanticError
+ * @brief Verifica se a operação de atribuição aritimetica é válida
+*/
 void SymbolTable::add(std::string name, std::string type, int size)
 {
+  SymbolParams params = SymbolParams(type, "0", size);
   if (!this->contains(name))
   {
-    Symbol symbol = std::make_pair(name, SymbolParams(type, "0", size));
-
     switch (str2int(type.c_str()))
     {
     case str2int("i32"):
-      symbol = std::make_pair(name, SymbolParams(type, "0", size));
+      params = SymbolParams(type, "0", size);
       break;
     case str2int("i64"):
-      symbol = std::make_pair(name, SymbolParams(type, "0", size));
+      params = SymbolParams(type, "0", size);
       break;
     case str2int("f32"):
-      symbol = std::make_pair(name, SymbolParams(type, "0.0", size));
+      params = SymbolParams(type, "0.0", size);
       break;
     case str2int("f64"):
-      symbol = std::make_pair(name, SymbolParams(type, "0.0", size));
+      params = SymbolParams(type, "0.0", size);
       break;
     case str2int("char"):
-      symbol = std::make_pair(name, SymbolParams(type, "\0", size));
+      params = SymbolParams(type, "\0", size);
       break;
     case str2int("bool"):
-      symbol = std::make_pair(name, SymbolParams(type, "false", size));
+      params = SymbolParams(type, "false", size);
       break;
     }
-    this->table.insert(symbol);
+    this->table.insert(std::make_pair(name, params));
   }
   else
   {
@@ -67,8 +79,8 @@ SymbolParams SymbolTable::get(std::string name)
   }
   else
   {
-    std::cout << "Error: A váriável " << name << " Não existe." << std::endl;
-    return SymbolParams("", "", 0);
+    std::cout << "Error: A váriável " << name << " não foi declarada." << std::endl;
+    exit(1);
   }
 }
 

@@ -1,3 +1,6 @@
+#ifndef _SEMANTIC_SYMBOLTABLE_H
+#define _SEMANTIC_SYMBOLTABLE_H
+
 #include <unordered_map>
 #include <string>
 #include <iostream>
@@ -17,3 +20,5 @@ public:
 private:
   std::unordered_map<std::string, SymbolParams> table;
 };
+
+#endif

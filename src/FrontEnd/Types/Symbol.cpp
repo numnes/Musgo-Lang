@@ -1,3 +1,6 @@
+#ifndef SYMBOL
+#define SYMBOL
+
 #include <string>
 
 struct SymbolParams
@@ -10,3 +13,5 @@ struct SymbolParams
 
 typedef struct SymbolParams SymbolParams;
 typedef std::pair<std::string, SymbolParams> Symbol;
+
+#endif // !SYMBOL

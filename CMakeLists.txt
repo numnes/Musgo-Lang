@@ -29,6 +29,13 @@ add_library(
   src/FrontEnd/Lexical/Lexical.h
   src/FrontEnd/Syntactic/Syntatic.h
   src/FrontEnd/Syntactic/Syntatic.cpp
+
+  src/FrontEnd/Semantic/Semantic.h
+  src/FrontEnd/Semantic/Semantic.cpp
+
+  src/FrontEnd/Semantic/SymbolTable.cpp
+  src/FrontEnd/Semantic/SymbolTable.cpp
+
   src/FrontEnd/Types/Production.cpp
   src/FrontEnd/Types/Symbol.cpp
   src/FrontEnd/Utils/Utils.cpp

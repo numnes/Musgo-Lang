@@ -10,3 +10,4 @@ MUSGO
 /CMakeCache.txt
 /cmake_install.cmake
 /*.a
+/dump.txt
