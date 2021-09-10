@@ -11,3 +11,4 @@ MUSGO
 /cmake_install.cmake
 /*.a
 /dump.txt
+/Makefile

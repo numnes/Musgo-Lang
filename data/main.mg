@@ -1,4 +1,4 @@
-i32 menor = 10 ;
+i32 menor = 10;
 
 char a = 'a';
 i32 vetor[4] = {10,20,40,50};
